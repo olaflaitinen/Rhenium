@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  llm-dbms:
+    build: .
+    container_name: llm-dbms
+    ports:
+      - "8000:8000"
+    environment:
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - LLM_PROVIDER=mock
+      - DEBUG=True
+    volumes:
+      - ./data:/app/data
+      - ./backend:/app/backend
+    restart: unless-stopped

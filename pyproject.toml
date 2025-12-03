@@ -1,29 +1,82 @@
 [project]
 name = "llm-based-dbms"
-version = "0.1.0"
-description = "Natural Language Interface for Database Management Systems"
+version = "1.0.0"
+description = "Production-grade LLM-based Database Management System with Natural Language Interface"
 readme = "README.md"
 requires-python = ">=3.11"
+authors = [
+    {name = "LLM-DBMS Team"}
+]
+license = {text = "MIT"}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["backend*", "experiments*"]
+exclude = ["data*", "docs*", "scripts*"]
+
 dependencies = [
+    # Web Framework
     "fastapi>=0.109.0",
-    "uvicorn>=0.27.0",
+    "uvicorn[standard]>=0.27.0",
+    
+    # Data Validation
     "pydantic>=2.6.0",
     "pydantic-settings>=2.1.0",
+    
+    # Database
+    "sqlalchemy>=2.0.0",
+    "alembic>=1.13.0",  # Database migrations
+    "psycopg2-binary>=2.9.9",  # PostgreSQL adapter
+    
+    # Authentication & Security
+    "python-jose[cryptography]>=3.3.0",  # JWT
+    "passlib[bcrypt]>=1.7.4",  # Password hashing
+    "python-multipart>=0.0.9",  # Form data parsing
+    
+    # LLM Integration
     "langchain>=0.1.0",
     "langchain-openai>=0.0.5",
+    "langchain-anthropic>=0.1.0",
+    "tiktoken>=0.5.0",  # Token counting
+    
+    # SQL Parsing
+    "sqlparse>=0.4.4",
+    
+    # Caching
+    "redis>=5.0.0",
+    
+    # Vector Store (Optional)
+    "chromadb>=0.4.0",
+    "sentence-transformers>=2.3.0",
+    
+    # Utilities
     "python-dotenv>=1.0.0",
     "pandas>=2.2.0",
     "tabulate>=0.9.0",
     "pyyaml>=6.0.1",
+    
+    # Observability
+    "structlog>=24.1.0",  # Structured logging
+    "prometheus-client>=0.19.0",  # Metrics
 ]
 
 [project.optional-dependencies]
 dev = [
+    # Testing
     "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
     "httpx>=0.26.0",
+    
+    # Code Quality
     "black>=24.1.0",
     "isort>=5.13.0",
     "mypy>=1.8.0",
+    "ruff>=0.1.0",
+    
+    # Development
+    "ipython>=8.20.0",
+    "ipdb>=0.13.13",
 ]
 
 [build-system]
@@ -33,4 +86,20 @@ build-backend = "setuptools.build_meta"
 [tool.pytest.ini_options]
 testpaths = ["backend/tests"]
 python_files = ["test_*.py"]
-addopts = "-v"
+addopts = "-v --cov=backend --cov-report=term-missing"
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
