@@ -16,7 +16,6 @@ parts/
 sdist/
 var/
 wheels/
-share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
@@ -24,20 +23,70 @@ MANIFEST
 
 # Virtual Environments
 venv/
-env/
 ENV/
-.env
+env/
 .venv
-env.bak/
-venv.bak/
 
 # IDEs
-.idea/
 .vscode/
+.idea/
 *.swp
 *.swo
+*~
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+.hypothesis/
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+data/processed/*.db
+data/processed/*.sqlite
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+logs/
+
+# Docker
+*.pid
+*.seed
+*.pid.lock
+
+# OS
+Thumbs.db
+.DS_Store
 
 # Project specific
-data/processed/*.db
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
 !data/processed/.gitkeep
-logs/
+experiments/results/
+experiments/datasets/*
+!experiments/datasets/.gitkeep
+
+# Cache
+.cache/
+*.cache
+
+# Jupyter
+.ipynb_checkpoints/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Artifacts (Antigravity)
+.gemini/

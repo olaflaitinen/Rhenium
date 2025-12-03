@@ -1,17 +1,92 @@
 version: '3.8'
 
 services:
-  llm-dbms:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: llmdbms-postgres
+    environment:
+      POSTGRES_USER: llmdbms
+      POSTGRES_PASSWORD: llmdbms_password_change_in_production
+      POSTGRES_DB: llmdbms
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U llmdbms" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis (for caching)
+  redis:
+    image: redis:7-alpine
+    container_name: llmdbms-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # API  Service
+  api:
     build: .
-    container_name: llm-dbms
+    container_name: llmdbms-api
     ports:
       - "8000:8000"
     environment:
-      - API_HOST=0.0.0.0
-      - API_PORT=8000
-      - LLM_PROVIDER=mock
-      - DEBUG=True
-    volumes:
-      - ./data:/app/data
-      - ./backend:/app/backend
+      # Environment
+      ENVIRONMENT: production
+      API_HOST: 0.0.0.0
+      API_PORT: 8000
+
+      # Database
+      DATABASE_TYPE: postgresql
+      POSTGRES_USER: llmdbms
+      POSTGRES_PASSWORD: llmdbms_password_change_in_production
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: llmdbms
+
+      # JWT
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-change-this-secret-key-in-production-use-at-least-32-characters}
+      JWT_EXPIRE_MINUTES: 1440
+
+      # LLM
+      LLM_PROVIDER: ${LLM_PROVIDER:-mock}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      MODEL_NAME: ${MODEL_NAME:-gpt-3.5-turbo}
+
+      # Redis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      ENABLE_LLM_CACHE: "True"
+
+      # Safety
+      SAFETY_MODE: strict
+      ALLOW_DANGEROUS_QUERIES: "False"
+
+      # Logging
+      LOG_LEVEL: INFO
+      ENABLE_METRICS: "True"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/health/liveness" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:

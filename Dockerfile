@@ -1,31 +1,50 @@
-FROM python:3.11-slim
+# Multi-stage Dockerfile for production deployment
+FROM python:3.11-slim as builder
 
 WORKDIR /app
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     gcc \
+    postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy dependency files
-COPY pyproject.toml .
-COPY .env.example .env
+# Copy requirements and install Python dependencies
+COPY requirements-minimal.txt .
+RUN pip install --no-cache-dir --user -r requirements-minimal.txt
+RUN pip install --no-cache-dir --user email-validator
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -e .
+# Production stage
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    postgresql-client \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy Python packages from builder
+COPY --from=builder /root/.local /root/.local
+
+# Make sure scripts in .local are usable
+ENV PATH=/root/.local/bin:$PATH
 
 # Copy application code
-COPY backend ./backend
-COPY scripts ./scripts
-COPY data ./data
-COPY experiments ./experiments
-COPY docs ./docs
+COPY backend/ /app/backend/
+COPY scripts/ /app/scripts/
+COPY .env.example /app/.env.example
 
-# Initialize database
-RUN python scripts/init_db.py
+# Create data directory
+RUN mkdir -p /app/data/processed
 
 # Expose port
 EXPOSE 8000
 
-# Run the application
-CMD ["python", "scripts/run_dev_server.py"]
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:8000/health/liveness || exit 1
+
+# Run application
+CMD ["python", "-m", "uvicorn", "backend.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
