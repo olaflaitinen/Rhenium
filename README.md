@@ -20,7 +20,7 @@ The system follows a modular, layered architecture:
 
 1.  **Clone the repository**
     ```bash
-    git clone <repository-url>
+    git clone https://github.com/olaflaitinen/llm-based-dbms.git
     cd llm-based-dbms
     ```
 
