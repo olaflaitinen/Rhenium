@@ -1,220 +1,119 @@
-"""
-Enhanced SQL validator using sqlparse for AST-based analysis.
-
-Provides:
-- SQL parsing and validation
-- Dangerous operation detection
-- Table/column access control
-- Policy-based validation
-"""
-import re
-from typing import List, Tuple, Set, Optional
 import sqlparse
-from sqlparse.sql import IdentifierList, Identifier, Where, Comparison, Token
-from sqlparse.tokens import Keyword, DML
+from sqlparse.sql import Statement, Token
+from sqlparse.tokens import Keyword
 
+from backend.config.settings import settings
 from backend.auth.models import User
 from backend.auth.rbac import RBACService
-from backend.config.settings import settings
-
-
-class SecurityError(Exception):
-    """Exception raised when a query violates safety rules."""
-    pass
-
-
-class SQLValidationResult:
-    """Result of SQL validation."""
-    def __init__(
-        self,
-        is_valid: bool,
-        error_message: Optional[str] = None,
-        blocked_reason: Optional[str] = None,
-        policy_violated: Optional[str] = None,
-        tables_accessed: Optional[Set[str]] = None
-    ):
-        self.is_valid = is_valid
-        self.error_message = error_message
-        self.blocked_reason = blocked_reason
-        self.policy_violated = policy_violated
-        self.tables_accessed = tables_accessed or set()
-
+from backend.safety.policies import get_policy, SQLPolicy
+from backend.safety.access_control import AccessControlService
+from backend.safety.explainer import SafetyExplainer
+from backend.api.schemas.query import SQLValidationResult
 
 class SQLValidator:
     """
-    Enhanced SQL validator with parser-based analysis.
+    Advanced SQL Validator using sqlparse and policy-based rules.
+    Enforces RBAC, safety modes, and prevents dangerous operations.
     """
-    
-    # Block list of dangerous SQL keywords
-    FORBIDDEN_KEYWORDS = {
-        "DROP", "DELETE", "TRUNCATE", "ALTER", "UPDATE", "INSERT",
-        "GRANT", "REVOKE", "COMMIT", "ROLLBACK", "REPLACE", "MERGE"
-    }
-    
-    # Allowed tables (can be configured via settings or database)
-    ALLOWED_TABLES = {"sales", "customers", "products", "orders"}
-    
-    @classmethod
-    def validate(
-        cls,
-        query: str,
-        user: Optional[User] = None,
-        strict_mode: bool = None
-    ) -> Tuple[bool, Optional[str]]:
+
+    def __init__(self, user: User):
+        self.user = user
+        self.policy: SQLPolicy = get_policy(settings.SAFETY_MODE)
+        self.rbac = RBACService()
+
+    def validate_and_explain(self, sql: str) -> SQLValidationResult:
         """
-        Validate a SQL query against safety rules.
-        
-        Args:
-            query: SQL query to validate
-            user: Optional user for RBAC checks
-            strict_mode: Override safety mode from settings
-            
-        Returns:
-            Tuple of (is_valid, error_message)
+        Validate SQL and return detailed result with explanation.
         """
-        if strict_mode is None:
-            strict_mode = settings.SAFETY_MODE == "strict"
+        is_valid, reason = self.validate(sql)
         
-        query_upper = query.upper()
-        query = query.strip()
+        if not is_valid:
+            explanation = SafetyExplainer.explain_rejection(reason, self.policy)
+            return SQLValidationResult(
+                is_valid=False,
+                sql=sql,
+                error_message=reason,
+                safety_explanation=explanation
+            )
         
-        # 1. Check for forbidden keywords (quick check)
-        for keyword in cls.FORBIDDEN_KEYWORDS:
-            if re.search(r'\b' + keyword + r'\b', query_upper):
-                # Allow if permissive mode and user has permission
-                if not strict_mode and user and RBACService.can_execute_dangerous_query(user):
-                    continue
-                return False, f"Query contains forbidden keyword: {keyword}"
-        
-        # 2. Check for multiple statements (SQL injection prevention)
-        stripped_query = query.rstrip(';')
-        if ';' in stripped_query:
-            return False, "Multiple statements are not allowed"
-        
-        # 3. Parse SQL using sqlparse
+        # If valid, check if we modified it (e.g. enforced LIMIT)
+        # For now, we just return the original valid SQL
+        return SQLValidationResult(
+            is_valid=True,
+            sql=sql,
+            safety_explanation="Query passed all safety checks."
+        )
+
+    def validate(self, sql: str) -> tuple[bool, str]:
+        """
+        Validates a SQL query against safety rules and user permissions.
+        Returns: (is_valid, error_message)
+        """
+        if not sql or not sql.strip():
+            return False, "Empty SQL query."
+
+        # Parse SQL
         try:
-            parsed = sqlparse.parse(query)
-            if not parsed:
-                return False, "Could not parse SQL query"
-            
-            statement = parsed[0]
-            
-            # 4. Check statement type
-            stmt_type = statement.get_type()
-            if stmt_type not in ('SELECT', 'UNKNOWN'):  # UNKNOWN for WITH clauses
-                # Check if it's a CTE (WITH ... SELECT)
-                if not query_upper.strip().startswith("WITH"):
-                    return False, f"Only SELECT queries are allowed (got {stmt_type})"
-            
-            # 5. Extract tables and check access
-            tables = cls._extract_tables(statement)
-            
-            if user:
-                # Check RBAC table access
-                accessible_tables = RBACService.get_accessible_tables(user)
-                if "*" not in accessible_tables:  # Not admin
-                    for table in tables:
-                        if table.lower() not in [t.lower() for t in accessible_tables]:
-                            return False, f"User does not have access to table: {table}"
-            
+            parsed = sqlparse.parse(sql)
         except Exception as e:
             return False, f"SQL parsing error: {str(e)}"
+
+        # 1. Check for multiple statements
+        if len(parsed) > 1:
+            # Some parsers might split semicolon ending as a second empty statement
+            # Check if the second statement is meaningful
+            if any(token.ttype is not sqlparse.tokens.Whitespace for token in parsed[1].flatten()):
+                 return False, "Multiple SQL statements are not allowed (semicolon injection prevention)."
+
+        stmt = parsed[0]
         
-        return True, None
-    
-    @classmethod
-    def validate_with_details(
-        cls,
-        query: str,
-        user: Optional[User] = None
-    ) -> SQLValidationResult:
-        """
-        Validate with detailed result including tables accessed.
+        # 2. Check Command Type (DML/DDL)
+        command_type = stmt.get_type().upper()
+        if command_type not in self.policy.allowed_commands:
+            return False, f"Forbidden command '{command_type}'. Allowed: {self.policy.allowed_commands}"
+
+        # 3. Extract Tables and Check Permissions
+        tables = self._extract_tables(stmt)
+        if not tables and command_type == "SELECT":
+             # Simple SELECT 1 or SELECT version() might have no tables, which is usually fine
+             pass
         
-        Args:
-            query: SQL query to validate
-            user: Optional user for RBAC checks
-            
-        Returns:
-            SQLValidationResult with detailed information
-        """
-        is_valid, error_msg = cls.validate(query, user)
+        accessible_tables = self.rbac.get_accessible_tables(self.user)
+        # If user is admin, accessible_tables might be {"*"} or handled separately
         
-        tables_accessed = set()
-        if is_valid:
-            try:
-                parsed = sqlparse.parse(query)
-                if parsed:
-                    tables_accessed = cls._extract_tables(parsed[0])
-            except:
-                pass
-        
-        return SQLValidationResult(
-            is_valid=is_valid,
-            error_message=error_msg,
-            blocked_reason=error_msg if not is_valid else None,
-            tables_accessed=tables_accessed
-        )
-    
-    @classmethod
-    def validate_or_raise(cls, query: str, user: Optional[User] = None):
-        """
-        Validate a query and raise SecurityError if invalid.
-        
-        Args:
-            query: SQL query to validate
-            user: Optional user for RBAC checks
-            
-        Raises:
-            SecurityError: If query is invalid
-        """
-        is_valid, error = cls.validate(query, user)
-        if not is_valid:
-            raise SecurityError(f"Security violation: {error}")
-    
-    @classmethod
-    def _extract_tables(cls, statement) -> Set[str]:
+        if "*" not in accessible_tables:
+            for table in tables:
+                if table.lower() not in accessible_tables:
+                    return False, f"Access denied for table '{table}'."
+
+        return True, ""
+
+    def _extract_tables(self, stmt: Statement) -> set[str]:
         """
         Extract table names from a parsed SQL statement.
-        
-        Args:
-            statement: sqlparse Statement object
-            
-        Returns:
-            Set of table names
         """
         tables = set()
         
-        from_seen = False
-        for token in statement.tokens:
-            if from_seen:
-                if isinstance(token, IdentifierList):
-                    for identifier in token.get_identifiers():
-                        tables.add(cls._get_table_name(identifier))
-                elif isinstance(token, Identifier):
-                    tables.add(cls._get_table_name(token))
-                from_seen = False
-            elif token.ttype is Keyword and token.value.upper() == 'FROM':
-                from_seen = True
-            elif isinstance(token, Identifier) and 'JOIN' in str(token).upper():
-                # Handle JOIN clauses
-                table_name = cls._get_table_name(token)
-                if table_name:
-                    tables.add(table_name)
-        
-        return tables
-    
-    @classmethod
-    def _get_table_name(cls, token) -> str:
-        """
-        Extract table name from a token.
-        
-        Args:
-            token: sqlparse token
+        # Robust extraction using sqlparse
+        idx = 0
+        tokens = stmt.tokens
+        while idx < len(tokens):
+            token = tokens[idx]
             
-        Returns:
-            Table name
-        """
-        if isinstance(token, Identifier):
-            return token.get_real_name()
-        return str(token).strip()
+            if token.ttype is Keyword and token.value.upper() in ['FROM', 'JOIN']:
+                # Next token (skipping whitespace) should be the table
+                idx += 1
+                while idx < len(tokens) and tokens[idx].is_whitespace:
+                    idx += 1
+                
+                if idx < len(tokens):
+                    target = tokens[idx]
+                    if isinstance(target, sqlparse.sql.IdentifierList):
+                        for id_ in target.get_identifiers():
+                            tables.add(id_.get_real_name())
+                    elif isinstance(target, sqlparse.sql.Identifier):
+                        tables.add(target.get_real_name())
+            
+            idx += 1
+            
+        return tables

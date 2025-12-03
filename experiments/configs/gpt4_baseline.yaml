@@ -1,0 +1,20 @@
+name: "gpt4_baseline"
+description: "Baseline performance of GPT-4 on Sales dataset"
+
+llm:
+  provider: "openai"
+  model: "gpt-4"
+  temperature: 0.1
+
+dataset:
+  name: "sales_v1"
+  path: "experiments/datasets/sales_v1.json"
+  format: "json"
+
+evaluation:
+  metrics: 
+    - "exact_match"
+    - "execution_accuracy"
+  max_samples: 50
+
+output_dir: "experiments/results/gpt4_baseline"
