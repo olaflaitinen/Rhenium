@@ -5,8 +5,8 @@ from pydantic import BaseModel
 from backend.llm.client import get_llm_client, LLMClient
 from backend.llm.prompts import get_text_to_sql_prompt
 from backend.safety.validator import SQLValidator
-from backend.db.executor import execute_sql_query, QueryExecutionError
-from backend.db.schema import sales_table
+from backend.database.executor import execute_sql_query, QueryExecutionError
+from backend.database.schema import sales_table
 from sqlalchemy.schema import CreateTable
 from sqlalchemy.engine import mock
 

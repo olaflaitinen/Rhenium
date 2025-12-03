@@ -30,7 +30,7 @@ The LLM-based DBMS is designed as a modular, layered system that translates natu
         - Prevent multiple statements (semicolon injection).
         - Restrict to allowed tables.
 
-### 4. Database Layer (`backend/db/`)
+### 4. Database Layer (`backend/database/`)
 - **Technology**: SQLAlchemy, SQLite
 - **Responsibilities**:
     - Manage database connections (`connection.py`).

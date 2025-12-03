@@ -5,7 +5,10 @@ description = "Production-grade LLM-based Database Management System with Natura
 readme = "README.md"
 requires-python = ">=3.11"
 authors = [
-    {name = "LLM-DBMS Team"}
+    {name = "Derya Umut Kulalı", email = ""},
+    {name = "Anıl Aydın", email = ""},
+    {name = "Sıla Alhan", email = ""},
+    {name = "Mehmet Fidan", email = ""}
 ]
 license = {text = "MIT"}
 

@@ -89,8 +89,8 @@ User Request (Natural Language)
 └────────┬──────────┘
          │
     ┌────┴────┐
-    │         │
-┌───▼───┐ ┌───▼───┐
+    ▼         ▼
+┌───────┐ ┌───────┐
 │  LLM  │ │Vector │  (Optional Semantic Search)
 │Service│ │ Store │
 └───┬───┘ └───┬───┘
@@ -281,12 +281,25 @@ python -m experiments.evaluate_text_to_sql --config experiments/configs/benchmar
 
 This project is executed by a multidisciplinary team of engineering students at Eskisehir Technical University, combining expertise in software development, embedded systems, and signal processing to address the complex challenges of AI-database integration.
 
-- **Principal Investigator / Student Proposer**:  
-  **Derya Umut Kulalı**
+### Student Team Members
 
-- **Academic Advisor**:  
-  **Mehmet Fidan**  
-  *Department of Electrical and Electronics Engineering*
+- **Derya Umut Kulalı**  
+  *Principal Investigator / Project Lead*  
+  Department of Electrical and Electronics Engineering
+
+- **Anıl Aydın**  
+  *Research Team Member*  
+  Department of Electrical and Electronics Engineering
+
+- **Sıla Alhan**  
+  *Research Team Member*  
+  Department of Electrical and Electronics Engineering
+
+### Academic Supervision
+
+- **Mehmet Fidan**  
+  *Academic Advisor*  
+  Department of Electrical and Electronics Engineering
 
 The team structure is intentionally designed to cover the full spectrum of the system's requirements, from high-level software architecture and API design to efficient data processing and system optimization.
 
@@ -306,7 +319,7 @@ If you use this project or its methodology in your research, please cite it as f
 
 ```bibtex
 @misc{kulali2025llmdbms,
-  author = {Kulalı, Derya Umut and Fidan, Mehmet},
+  author = {Kulalı, Derya Umut and Aydın, Anıl and Alhan, Sıla and Fidan, Mehmet},
   title = {LLM Based Database Management System: A Natural Language Interface for Relational Databases},
   year = {2025},
   publisher = {GitHub},
