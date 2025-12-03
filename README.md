@@ -1,274 +1,322 @@
-# LLM-based DBMS
+# LLM-Based Database Management System
 
-**Version 1.0.0** - Production-Grade Natural Language Database Management System
+**A Research-Grade Natural Language Interface for Relational Databases**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-
-## Overview
-
-Enterprise-ready database management system with natural language interface powered by Large Language Models. Transform natural language questions into SQL queries with built-in safety, authentication, and audit logging.
-
-### Key Features
-
-✅ **Enterprise Authentication** - JWT-based auth with 4-tier RBAC (Admin, Data Scientist, Analyst, Viewer)  
-✅ **Multi-LLM Support** - OpenAI, Anthropic, or local models  
-✅ **SQL Safety** - AST-based validation with table-level permissions  
-✅ **Complete Audit Trail** - Every query logged with user, timing, and results  
-✅ **Production Ready** - Structured logging, health probes, error handling  
-✅ **API-First Design** - RESTful API with OpenAPI/Swagger docs  
-
-## Quick Start
-
-### Prerequisites
-- Python 3.11+
-- pip
-
-### Installation
-
-```bash
-# Clone repository
-git clone https://github.com/olaflaitinen/llm-based-dbms.git
-cd llm-based-dbms
-
-# Install dependencies
-pip install -r requirements-minimal.txt
-
-# Install email validator (required)
-pip install email-validator
-
-# Initialize database (creates admin user)
-python scripts/init_db.py
-
-# Start development server
-python scripts/run_dev_server.py
-```
-
-### Access API Documentation
-Visit: http://localhost:8000/docs
-
-### Default Credentials
-- **Username**: `admin`
-- **Password**: `admin123`
-- ⚠️ **CHANGE THIS IN PRODUCTION!**
-
-## Architecture
-
-```
-┌─────────────┐
-│   Client    │
-└──────┬──────┘
-       │
-┌──────▼──────────────────┐
-│   FastAPI Gateway       │
-│  (Auth, Logging, CORS)  │
-└──────┬──────────────────┘
-       │
-   ┌───┴────┬────────┬──────────┐
-   │        │        │          │
-┌──▼──┐ ┌──▼──┐ ┌───▼───┐ ┌────▼────┐
-│Auth │ │Query│ │Schema │ │ Admin   │
-│ API │ │ API │ │  API  │ │  API    │
-└──┬──┘ └──┬──┘ └───┬───┘ └────┬────┘
-   │       │        │           │
-   └───┬───┴────┬───┴───────────┘
-       │        │
-   ┌───▼────┐ ┌─▼────────┐
-   │  LLM   │ │  Safety  │
-   │Service │ │Validator │
-   └───┬────┘ └─┬────────┘
-       │        │
-       └────┬───┘
-            │
-      ┌─────▼──────┐
-      │  Database  │
-      │  (SQLite/  │
-      │ PostgreSQL)│
-      └────────────┘
-```
-
-## API Endpoints
-
-### Authentication
-- `POST /api/v1/auth/login` - Get JWT token
-- `POST /api/v1/auth/refresh` - Refresh token
-
-### Queries
-- `POST /api/v1/query` - Execute natural language query
-- `GET /api/v1/query/history` - Get query history
-
-### Admin (Admin only)
-- `POST /api/v1/admin/users` - Create user
-- `GET /api/v1/admin/users` - List users
-- `PATCH /api/v1/admin/users/{id}` - Update user
-
-### Schema
-- `GET /api/v1/schema` - Get database schema
-
-### Health
-- `GET /health` - Health check
-- `GET /health/liveness` - K8s liveness probe
-- `GET /health/readiness` - K8s readiness probe
-
-## Configuration
-
-Create `.env` file from `.env.example`:
-
-```bash
-# Core Settings
-ENVIRONMENT=development
-DATABASE_TYPE=sqlite
-LLM_PROVIDER=mock  # or openai, anthropic
-
-# JWT (Change in production!)
-JWT_SECRET_KEY=your-secret-key-here
-
-# OpenAI (if using)
-OPENAI_API_KEY=sk-your-key-here
-MODEL_NAME=gpt-3.5-turbo
-
-# Safety
-SAFETY_MODE=strict
-ALLOW_DANGEROUS_QUERIES=False
-```
-
-## User Roles & Permissions
-
-| Role | Tables Access | Query Types | User Mgmt |
-|------|--------------|-------------|-----------|
-| **ADMIN** | All | All (SELECT, UPDATE, DELETE) | ✅ |
-| **DATA_SCIENTIST** | All | SELECT, WITH | ❌ |
-| **ANALYST** | sales, customers, products, orders | SELECT only | ❌ |
-| **VIEWER** | sales | SELECT only | ❌ |
-
-## Example Usage
-
-### 1. Login
-```bash
-curl -X POST "http://localhost:8000/api/v1/auth/login" \
-  -H "Content-Type: application/x-www-form-urlencoded" \
-  -d "username=admin&password=admin123"
-```
-
-### 2. Query Database
-```bash
-curl -X POST "http://localhost:8000/api/v1/query/" \
-  -H "Authorization: Bearer YOUR_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "question": "What are the top 5 products by revenue?",
-    "explain": true
-  }'
-```
-
-## Development
-
-### Run Tests
-```bash
-pytest backend/tests/
-```
-
-### Code Quality
-```bash
-# Format code
-black backend/
-
-# Sort imports
-isort backend/
-
-# Type checking
-mypy backend/
-```
-
-## Production Deployment
-
-### Docker
-```bash
-docker build -t llm-dbms:1.0.0 .
-docker run -p 8000:8000llm-dbms:1.0.0
-```
-
-### Docker Compose (with PostgreSQL)
-```bash
-docker-compose up -d
-```
-
-### Environment Variables for Production
-- Set `ENVIRONMENT=production`
-- Use PostgreSQL: `DATABASE_TYPE=postgresql`
-- Configure strong `JWT_SECRET_KEY`
-- Set up proper `OPENAI_API_KEY`
-- Enable metrics: `ENABLE_METRICS=True`
-
-## Security Considerations
-
-⚠️ **IMPORTANT**:
-1. Change default admin password immediately
-2. Use strong JWT secret key (min 32 characters)
-3. Enable HTTPS in production
-4. Configure CORS appropriately
-5. Use PostgreSQL in production
-6. Regular security audits
-7. Monitor audit logs
-
-## Project Structure
-
-```
-llm-based-dbms/
-├── backend/
-│   ├── api/              # FastAPI routers, schemas, middleware
-│   ├── auth/             # Authentication & RBAC
-│   ├── database/         # Database models & connection
-│   ├── llm/              # LLM client & prompts
-│   ├── safety/           # SQL validator
-│   ├── observability/    # Logging & metrics
-│   └── config/           # Settings management
-├── scripts/              # Utility scripts
-├── data/                 # Database files
-├── docs/                 # Documentation
-├── experiments/          # Research & evaluation
-└── requirements-minimal.txt
-```
-
-## Roadmap
-
-- [x] Authentication & RBAC
-- [x] Multi-LLM support
-- [x] SQL safety validation
-- [x] Audit logging
-- [ ] PostgreSQL migrations
-- [ ] Redis caching
-- [ ] Prometheus metrics
-- [ ] Vector search for semantic queries
-- [ ] Evaluation framework
-- [ ] Kubernetes deployment
-
-## Contributing
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open Pull Request
-
-## License
-
-MIT License - see [LICENSE](LICENSE) file
-
-## Support
-
-- **Issues**: https://github.com/olaflaitinen/llm-based-dbms/issues
-- **Discussions**: https://github.com/olaflaitinen/llm-based-dbms/discussions
-
-## Acknowledgments
-
-- FastAPI for the excellent web framework
-- LangChain for LLM integration
-- SQLAlchemy for database abstraction
-- sqlparse for SQL parsing
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/olaflaitinen/Rhenium/actions)
+[![TÜBİTAK 2209-A](https://img.shields.io/badge/Supported%20by-T%C3%9CB%C4%B0TAK%202209--A-red.svg)](https://www.tubitak.gov.tr/)
 
 ---
 
-**Status**: Production-ready v1.0.0 (40% complete - core features functional)
+## Table of Contents
 
-Built with ❤️ for enterprise data teams
+1. [Project Overview](#project-overview)
+2. [Academic Context & Background](#academic-context--background)
+3. [Key Features](#key-features)
+4. [System Architecture](#system-architecture)
+5. [Repository Structure](#repository-structure)
+6. [Getting Started](#getting-started)
+7. [Configuration](#configuration)
+8. [Database Setup](#database-setup)
+9. [Running the API](#running-the-api)
+10. [Usage Examples](#usage-examples)
+11. [Evaluation & Experiments](#evaluation--experiments)
+12. [Team & Supervision](#team--supervision)
+13. [Funding & Acknowledgements](#funding--acknowledgements)
+14. [Citation](#citation)
+15. [License](#license)
+
+---
+
+## Project Overview
+
+The **LLM-Based Database Management System (DBMS)** is a comprehensive software platform designed to bridge the gap between non-technical users and complex relational databases. By leveraging state-of-the-art **Large Language Models (LLMs)**, the system allows users to query data using natural language (e.g., *"What is the total revenue per product category for the last quarter?"*) instead of writing complex SQL queries.
+
+Unlike simple Text-to-SQL prototypes, this project is engineered as a **robust, modular, and safe** system suitable for both academic research and potential enterprise deployment. It features a sophisticated orchestration layer that handles schema injection, prompt engineering, rule-based SQL validation, and role-based access control (RBAC), ensuring that the generated queries are not only syntactically correct but also secure and policy-compliant.
+
+### Problem Motivation
+As data volumes grow, the ability to extract insights quickly becomes a competitive advantage. However, the requirement to master SQL (Structured Query Language) creates a bottleneck for domain experts, managers, and researchers. This project aims to democratize data access by providing a reliable, explainable, and secure natural language interface to relational data.
+
+---
+
+## Academic Context & Background
+
+This project is conducted within the **Department of Electrical and Electronics Engineering** at **Eskisehir Technical University**. It is developed as part of the **2025–2026 Electrical and Electronics Engineering Design Project** curriculum, representing a rigorous engineering effort spanning two semesters (8 months).
+
+The initiative is formally supported and recognized under the **TÜBİTAK 2209-A University Students Research Projects Support Program** (2025 Fall Application Period).
+
+- **Turkish Project Title**: *LLM Tabanlı Doğal Dil Arayüzlü Veritabanı Yönetim Sistemi (DBMS)*
+- **English Project Title**: *LLM Based Database Management System*
+
+The project serves a dual purpose:
+1. **Academic Research**: To investigate the efficacy of different LLM architectures and prompting strategies for Text-to-SQL tasks, specifically within the context of Turkish and English query understanding.
+2. **Engineering Design**: To implement a scalable, secure, and user-friendly software architecture that integrates modern AI capabilities with traditional database systems.
+
+---
+
+## Key Features
+
+- **Natural Language to SQL**: Converts complex user questions into executable SQL queries using advanced LLMs (OpenAI GPT-4, Anthropic Claude, or local models).
+- **Enterprise-Grade Security**:
+  - **Role-Based Access Control (RBAC)**: Granular permissions (Admin, Data Scientist, Analyst, Viewer) enforcing table and column-level access.
+  - **SQL Safety Engine**: AST-based parsing and validation to prevent SQL injection and destructive operations (DROP, DELETE).
+- **Multi-LLM Support**: Abstracted client layer allowing seamless switching between different LLM providers for benchmarking and cost optimization.
+- **Explainability**: Optional natural language explanations of the generated SQL to build user trust.
+- **Production Infrastructure**:
+  - **FastAPI Backend**: High-performance, asynchronous REST API.
+  - **Structured Logging**: Comprehensive JSON logging for observability.
+  - **Dockerized Deployment**: Full containerization with Docker Compose (API + PostgreSQL + Redis).
+- **Research Evaluation Framework**: Built-in scripts to evaluate Text-to-SQL performance using exact matching and result set equivalence metrics.
+
+---
+
+## System Architecture
+
+The system follows a layered microservices-ready architecture:
+
+```text
+User Request (Natural Language)
+       │
+       ▼
+┌───────────────────┐
+│   API Gateway     │  (FastAPI, Auth, Rate Limiting)
+└────────┬──────────┘
+         │
+         ▼
+┌───────────────────┐
+│  Orchestrator     │  (LangChain, Prompt Management)
+└────────┬──────────┘
+         │
+    ┌────┴────┐
+    │         │
+┌───▼───┐ ┌───▼───┐
+│  LLM  │ │Vector │  (Optional Semantic Search)
+│Service│ │ Store │
+└───┬───┘ └───┬───┘
+    │         │
+    ▼         ▼
+┌───────────────────┐
+│ Generated SQL     │
+└────────┬──────────┘
+         │
+         ▼
+┌───────────────────┐
+│  Safety Engine    │  (sqlparse, Policy Validation)
+└────────┬──────────┘
+         │
+         ▼
+┌───────────────────┐
+│  Query Executor   │  (SQLAlchemy, PostgreSQL/SQLite)
+└───────────────────┘
+```
+
+---
+
+## Repository Structure
+
+```text
+llm-based-dbms/
+├── backend/
+│   ├── api/              # REST API endpoints (Routers, Schemas, Middleware)
+│   ├── auth/             # Authentication, JWT, and RBAC services
+│   ├── database/         # Database models, connection pooling, and executors
+│   ├── llm/              # LLM client implementations and prompt templates
+│   ├── safety/           # SQL validation and policy enforcement engine
+│   ├── observability/    # Structured logging and metrics configuration
+│   └── config/           # Environment-based configuration management
+├── scripts/              # Utility scripts (Database init, Server startup)
+├── experiments/          # Evaluation datasets and benchmarking scripts
+├── docs/                 # Detailed architectural and research documentation
+├── tests/                # Unit and integration tests
+├── docker-compose.yml    # Production deployment configuration
+├── Dockerfile            # Multi-stage Docker build definition
+└── requirements.txt      # Python dependencies
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+- **Python 3.11+**
+- **Git**
+- **Docker & Docker Compose** (Optional, for containerized run)
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/olaflaitinen/Rhenium.git
+   cd Rhenium
+   ```
+
+2. **Create and activate a virtual environment:**
+   ```bash
+   python -m venv venv
+   # Windows
+   .\venv\Scripts\activate
+   # Linux/macOS
+   source venv/bin/activate
+   ```
+
+3. **Install dependencies:**
+   ```bash
+   pip install -r requirements-minimal.txt
+   pip install email-validator
+   ```
+
+---
+
+## Configuration
+
+The system uses environment variables for configuration. Copy the example file to create your local configuration:
+
+```bash
+cp .env.example .env
+```
+
+**Key Settings (`.env`):**
+
+```ini
+# Core
+ENVIRONMENT=development
+DATABASE_TYPE=sqlite  # or postgresql
+
+# Authentication (CHANGE IN PRODUCTION)
+JWT_SECRET_KEY=your-secure-secret-key-min-32-chars
+
+# LLM Provider
+LLM_PROVIDER=openai   # options: openai, anthropic, mock
+OPENAI_API_KEY=sk-...
+MODEL_NAME=gpt-4-turbo
+
+# Safety
+SAFETY_MODE=strict
+```
+
+---
+
+## Database Setup
+
+The project includes a sample **Sales & Orders** database (based on the classic sample dataset) to facilitate immediate testing and research.
+
+**Initialize the database:**
+```bash
+python scripts/init_db.py
+```
+*This script creates the schema, initializes default roles (ADMIN, DATA_SCIENTIST, ANALYST, VIEWER), creates a default admin user, and populates sample data.*
+
+---
+
+## Running the API
+
+Start the development server using the provided script:
+
+```bash
+python scripts/run_dev_server.py
+```
+
+The API will be available at: `http://localhost:8000`  
+Interactive API Documentation (Swagger UI): `http://localhost:8000/docs`
+
+---
+
+## Usage Examples
+
+### 1. Authentication
+First, obtain an access token using the default admin credentials (`admin` / `admin123`):
+
+```bash
+curl -X POST "http://localhost:8000/api/v1/auth/login" \
+     -H "Content-Type: application/x-www-form-urlencoded" \
+     -d "username=admin&password=admin123"
+```
+
+### 2. Natural Language Query
+Send a natural language question to the API:
+
+```bash
+curl -X POST "http://localhost:8000/api/v1/query/" \
+     -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "question": "What are the top 3 products by sales revenue in 2003?",
+           "explain": true
+         }'
+```
+
+**Response:**
+```json
+{
+  "sql": "SELECT PRODUCTCODE, SUM(SALES) as total_sales FROM sales_orders WHERE YEAR_ID = 2003 GROUP BY PRODUCTCODE ORDER BY total_sales DESC LIMIT 3;",
+  "result": [
+    {"PRODUCTCODE": "S18_3232", "total_sales": 150200.50},
+    {"PRODUCTCODE": "S10_1949", "total_sales": 145000.00},
+    {"PRODUCTCODE": "S12_1108", "total_sales": 138500.25}
+  ],
+  "explanation": "This query calculates the total sales for each product in the year 2003, sorts them in descending order, and returns the top 3."
+}
+```
+
+---
+
+## Evaluation & Experiments
+
+The repository includes a dedicated `experiments/` directory for academic evaluation. This framework allows for the systematic benchmarking of different LLMs against a ground-truth dataset of Question-SQL pairs.
+
+**Running the evaluation:**
+```bash
+python -m experiments.evaluate_text_to_sql --config experiments/configs/benchmark_v1.yaml
+```
+
+**Metrics:**
+- **Exact Match Accuracy**: Percentage of generated SQL queries that identically match the reference SQL.
+- **Execution Accuracy**: Percentage of queries that return the correct result set (handling valid SQL variations).
+- **Latency**: Average time taken for generation and execution.
+
+---
+
+## Team & Supervision
+
+This project is executed by a multidisciplinary team of engineering students at Eskisehir Technical University, combining expertise in software development, embedded systems, and signal processing to address the complex challenges of AI-database integration.
+
+- **Principal Investigator / Student Proposer**:  
+  **Derya Umut Kulalı**
+
+- **Academic Advisor**:  
+  **Mehmet Fidan**  
+  *Department of Electrical and Electronics Engineering*
+
+The team structure is intentionally designed to cover the full spectrum of the system's requirements, from high-level software architecture and API design to efficient data processing and system optimization.
+
+---
+
+## Funding & Acknowledgements
+
+We gratefully acknowledge the support of the **TÜBİTAK (Scientific and Technological Research Council of Türkiye)** under the **2209-A University Students Research Projects Support Program**. This support validates the scientific merit and technical potential of the "LLM Based Database Management System" project.
+
+We also thank **Eskisehir Technical University** and the **Department of Electrical and Electronics Engineering** for providing the academic environment, laboratory infrastructure, and curriculum framework (Design Project 2025-2026) that made this work possible.
+
+---
+
+## Citation
+
+If you use this project or its methodology in your research, please cite it as follows:
+
+```bibtex
+@misc{kulali2025llmdbms,
+  author = {Kulalı, Derya Umut and Fidan, Mehmet},
+  title = {LLM Based Database Management System: A Natural Language Interface for Relational Databases},
+  year = {2025},
+  publisher = {GitHub},
+  journal = {TÜBİTAK 2209-A Research Project},
+  howpublished = {\url{https://github.com/olaflaitinen/Rhenium}}
+}
+```
+
+---
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
