@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llm-dbms-api
+  labels:
+    app: llm-dbms
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: llm-dbms
+  template:
+    metadata:
+      labels:
+        app: llm-dbms
+    spec:
+      containers:
+      - name: api
+        image: olaflaitinen/llm-dbms:latest
+        ports:
+        - containerPort: 8000
+        envFrom:
+        - configMapRef:
+            name: llm-dbms-config
+        - secretRef:
+            name: llm-dbms-secrets
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health/liveness
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health/readiness
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
