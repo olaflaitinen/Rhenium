@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     POSTGRES_DB: str = "llmdbms"
     
     # JWT Configuration
-    JWT_SECRET_KEY: str = secrets.token_urlsafe(32)  # Generate random if not set
+    JWT_SECRET_KEY: str = "dev-secret-key-change-in-production-use-env-variable"
     JWT_ALGORITHM: str = "HS256"
     JWT_EXPIRE_MINUTES: int = 60 * 24  # 24 hours
     
