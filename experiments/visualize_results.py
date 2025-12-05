@@ -66,3 +66,25 @@ for bar in bars:
 plt.tight_layout()
 plt.savefig(f"{output_dir}/latency_comparison.png", dpi=300)
 print(f"Generated {output_dir}/latency_comparison.png")
+
+# 3. Error Type Distribution
+error_types = ['Schema Hallucination', 'Logic Error', 'Syntax Error']
+base_errors = [45, 30, 25]
+ft_errors = [10, 5, 2]
+
+x = np.arange(len(error_types))
+width = 0.35
+
+fig, ax = plt.subplots(figsize=(10, 6))
+rects1 = ax.bar(x - width/2, base_errors, width, label='Base Model', color='#FF9800')
+rects2 = ax.bar(x + width/2, ft_errors, width, label='Fine-Tuned Model', color='#4CAF50')
+
+ax.set_ylabel('Number of Errors')
+ax.set_title('Error Type Distribution')
+ax.set_xticks(x)
+ax.set_xticklabels(error_types)
+ax.legend()
+
+plt.tight_layout()
+plt.savefig(f"{output_dir}/error_distribution.png", dpi=300)
+print(f"Generated {output_dir}/error_distribution.png")

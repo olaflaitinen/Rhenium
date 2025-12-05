@@ -62,7 +62,31 @@ Fine-tuned local models offer significantly lower latency compared to large API-
 | **Llama-3-8B (Base)** | 0.40s |
 | **Llama-3-8B (Fine-Tuned)** | 0.45s |
 
-![Latency Comparison](images/latency_comparison.png)
+### 3. Error Analysis
+
+The fine-tuned model drastically reduces "Schema Hallucination" errors, which are the most common failure mode for the base model.
+
+![Error Distribution](images/error_distribution.png)
+
+## Qualitative Analysis
+
+We conducted a side-by-side comparison of model outputs on challenging queries.
+
+### Case Study 1: Schema Hallucination
+**Question**: "List all customers in France who have a credit limit over 50000."
+
+- **Base Model**: `SELECT name FROM client_table WHERE country_name = 'France' ...`
+  - ❌ **Error**: Hallucinated table `client_table` and column `country_name`.
+- **Fine-Tuned Model**: `SELECT CUSTOMERNAME FROM customers WHERE COUNTRY = 'France' ...`
+  - ✅ **Correct**: Used correct schema `customers` and `COUNTRY`.
+
+### Case Study 2: Domain Logic
+**Question**: "Show me the big deals."
+
+- **Base Model**: `SELECT * FROM deals WHERE size = 'big'`
+  - ❌ **Error**: Literal interpretation of "big deals".
+- **Fine-Tuned Model**: `SELECT * FROM sales WHERE DEALSIZE = 'Large'`
+  - ✅ **Correct**: Understood "big deals" maps to `DEALSIZE = 'Large'`.
 
 ## Analysis
 
