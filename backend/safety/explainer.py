@@ -1,4 +1,4 @@
-"""
+﻿"""
 Explainability Engine for Safety Decisions.
 
 This module generates human-readable explanations for why a query was allowed

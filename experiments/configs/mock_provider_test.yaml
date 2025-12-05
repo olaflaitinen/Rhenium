@@ -1,4 +1,4 @@
-name: "mock_provider_test"
+﻿name: "mock_provider_test"
 description: "Testing with mock LLM provider (no API key needed)"
 version: "1.0.0"
 

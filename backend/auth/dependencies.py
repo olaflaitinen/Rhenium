@@ -1,4 +1,4 @@
-"""
+﻿"""
 FastAPI dependencies for authentication and authorization.
 
 Provides dependency functions for:

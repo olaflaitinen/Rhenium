@@ -1,4 +1,4 @@
-"""
+﻿"""
 Schema router for database schema inspection and management.
 
 Provides endpoints to:

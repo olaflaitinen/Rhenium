@@ -1,4 +1,4 @@
-"""
+﻿"""
 Main FastAPI application with production-grade configuration.
 
 Includes:

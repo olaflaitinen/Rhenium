@@ -1,4 +1,4 @@
-"""
+﻿"""
 Common schemas shared across the API.
 
 Includes error responses, pagination, and base models.

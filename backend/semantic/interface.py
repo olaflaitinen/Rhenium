@@ -1,4 +1,4 @@
-"""
+﻿"""
 Vector Store Interface.
 
 Abstract base class for vector store implementations to support

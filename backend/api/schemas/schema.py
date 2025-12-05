@@ -1,4 +1,4 @@
-"""
+﻿"""
 Database schema-related API schemas.
 """
 from typing import List, Dict, Any, Optional

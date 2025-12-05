@@ -1,4 +1,4 @@
-"""
+﻿"""
 Prometheus Metrics Exporter.
 
 Defines and exposes application metrics for monitoring.

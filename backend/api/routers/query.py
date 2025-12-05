@@ -1,4 +1,4 @@
-"""
+﻿"""
 Query router for natural language to SQL functionality.
 
 Handles:

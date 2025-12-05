@@ -1,4 +1,4 @@
-"""
+﻿"""
 Data models for authentication and authorization.
 
 Defines User, Role, and Permission models with SQLAlchemy ORM.

@@ -1,9 +1,9 @@
-# Developer Guide
+﻿# Developer Guide
 
 ## LLM-Based DBMS - Comprehensive Development Documentation
 
-**For**: Eskişehir Technical University, Department of Electrical and Electronics Engineering  
-**Project**: 2025-2026 Design Project | TÜBİTAK 2209-A Research Project  
+**For**: Eskişehir Technical University, Department of Electrical and Electronics Engineering 
+**Project**: 2025-2026 Design Project | TÜBİTAK 2209-A Research Project 
 **Team**: Derya Umut Kulalı, Anıl Aydın, Sıla Alhan | **Advisor**: Mehmet Fidan
 
 ---
@@ -38,8 +38,8 @@
 #### 1. Clone and Navigate
 
 ```bash
-git clone https://github.com/olaflaitinen/Rhenium.git
-cd Rhenium
+git clone https://github.com/Japyh/llm-based-dbms.git
+cd llm-based-dbms
 ```
 
 #### 2. Create Virtual Environment
@@ -67,7 +67,7 @@ pip install email-validator
 **Full (with dev tools):**
 ```bash
 pip install -r requirements.txt
-pip install -e ".[dev]"  # Editable install with dev dependencies
+pip install -e ".[dev]" # Editable install with dev dependencies
 ```
 
 #### 4. Configure Environment
@@ -81,7 +81,7 @@ Edit `.env` for development:
 ENVIRONMENT=development
 DEBUG=True
 DATABASE_TYPE=sqlite
-LLM_PROVIDER=mock  # No API key needed for testing
+LLM_PROVIDER=mock # No API key needed for testing
 LOG_LEVEL=DEBUG
 ```
 
@@ -111,28 +111,28 @@ Visit http://localhost:8000/docs to confirm API is running.
 
 ```
 ┌─────────────┐
-│   Client    │
+│ Client │
 └──────┬──────┘
-       │ HTTP/REST
+ │ HTTP/REST
 ┌──────▼──────────┐
-│   API Layer     │ (FastAPI)
-│  - Routers      │
-│  - Middleware   │
-│  - Schemas      │
+│ API Layer │ (FastAPI)
+│ - Routers │
+│ - Middleware │
+│ - Schemas │
 └──────┬──────────┘
-       │
+ │
 ┌──────▼──────────┐
-│ Business Logic  │
-│  - LLM Client   │
-│  - Safety       │
-│  - Auth/RBAC    │
+│ Business Logic │
+│ - LLM Client │
+│ - Safety │
+│ - Auth/RBAC │
 └──────┬──────────┘
-       │
+ │
 ┌──────▼──────────┐
-│  Data Layer     │
-│  - Database     │
-│  - Repository   │
-│  - Models       │
+│ Data Layer │
+│ - Database │
+│ - Repository │
+│ - Models │
 └─────────────────┘
 ```
 
@@ -141,42 +141,42 @@ Visit http://localhost:8000/docs to confirm API is running.
 #### `backend/api/`
 - **Purpose**: HTTP request handling
 - **Key Files**:
-  - `main.py`: Application factory
-  - `routers/`: Endpoint definitions
-  - `schemas/`: Pydantic models
-  - `middleware/`: Custom middleware
+ - `main.py`: Application factory
+ - `routers/`: Endpoint definitions
+ - `schemas/`: Pydantic models
+ - `middleware/`: Custom middleware
 
 #### `backend/llm/`
 - **Purpose**: LLM integration and prompt management
 - **Key Files**:
-  - `client.py`: Multi-provider LLM client
-  - `prompts.py`: Prompt templates
-  - `cache.py`: Response caching
-  - `token_tracking.py`: Usage monitoring
+ - `client.py`: Multi-provider LLM client
+ - `prompts.py`: Prompt templates
+ - `cache.py`: Response caching
+ - `token_tracking.py`: Usage monitoring
 
 #### `backend/safety/`
 - **Purpose**: SQL validation and security
 - **Key Files**:
-  - `validator.py`: AST-based SQL validator
-  - `policies.py`: Safety policy definitions
-  - `access_control.py`: RBAC enforcement
-  - `explainer.py`: Validation explanations
+ - `validator.py`: AST-based SQL validator
+ - `policies.py`: Safety policy definitions
+ - `access_control.py`: RBAC enforcement
+ - `explainer.py`: Validation explanations
 
 #### `backend/database/`
 - **Purpose**: Data persistence
 - **Key Files**:
-  - `connection.py`: Connection pooling
-  - `models.py`: SQLAlchemy ORM models
-  - `executor.py`: Query execution
-  - `migrations/`: Alembic migrations
+ - `connection.py`: Connection pooling
+ - `models.py`: SQLAlchemy ORM models
+ - `executor.py`: Query execution
+ - `migrations/`: Alembic migrations
 
 #### `backend/auth/`
 - **Purpose**: Authentication and authorization
 - **Key Files**:
-  - `service.py`: Auth business logic
-  - `models.py`: User and Role models
-  - `rbac.py`: Role-based access control
-  - `dependencies.py`: FastAPI dependencies
+ - `service.py`: Auth business logic
+ - `models.py`: User and Role models
+ - `rbac.py`: Role-based access control
+ - `dependencies.py`: FastAPI dependencies
 
 ---
 
@@ -188,67 +188,67 @@ Visit http://localhost:8000/docs to confirm API is running.
 backend/
 ├── __init__.py
 ├── api/
-│   ├── __init__.py
-│   ├── main.py          # App factory
-│   ├── routes.py        # Legacy router
-│   ├── routers/
-│   │   ├── __init__.py
-│   │   ├── query.py     # Query endpoints
-│   │   ├── auth.py      # Auth endpoints
-│   │   ├── admin.py     # Admin endpoints
-│   │   ├── health.py    # Health checks
-│   │   └── schema.py    # Schema endpoints
-│   ├── schemas/
-│   │   ├── __init__.py
-│   │   ├── query.py     # Query request/response
-│   │   ├── auth.py      # Auth schemas
-│   │   └── common.py    # Shared schemas
-│   └── middleware/
-│       ├── __init__.py
-│       ├── logging.py   # Request logging
-│       └── error_handler.py
+│ ├── __init__.py
+│ ├── main.py # App factory
+│ ├── routes.py # Legacy router
+│ ├── routers/
+│ │ ├── __init__.py
+│ │ ├── query.py # Query endpoints
+│ │ ├── auth.py # Auth endpoints
+│ │ ├── admin.py # Admin endpoints
+│ │ ├── health.py # Health checks
+│ │ └── schema.py # Schema endpoints
+│ ├── schemas/
+│ │ ├── __init__.py
+│ │ ├── query.py # Query request/response
+│ │ ├── auth.py # Auth schemas
+│ │ └── common.py # Shared schemas
+│ └── middleware/
+│ ├── __init__.py
+│ ├── logging.py # Request logging
+│ └── error_handler.py
 ├── llm/
-│   ├── __init__.py
-│   ├── client.py        # LLM abstraction
-│   ├── prompts.py       # Prompt templates
-│   ├── cache.py         # Response caching
-│   └── token_tracking.py
+│ ├── __init__.py
+│ ├── client.py # LLM abstraction
+│ ├── prompts.py # Prompt templates
+│ ├── cache.py # Response caching
+│ └── token_tracking.py
 ├── safety/
-│   ├── __init__.py
-│   ├── validator.py     # SQL validation
-│   ├── policies.py      # Safety policies
-│   ├── access_control.py
-│   └── explainer.py
+│ ├── __init__.py
+│ ├── validator.py # SQL validation
+│ ├── policies.py # Safety policies
+│ ├── access_control.py
+│ └── explainer.py
 ├── database/
-│   ├── __init__.py
-│   ├── connection.py    # DB connection
-│   ├── models.py        # ORM models
-│   ├── executor.py      # Query executor
-│   ├── repository.py    # Data access
-│   ├── schema.py        # Schema definitions
-│   └── migrations/      # Alembic
+│ ├── __init__.py
+│ ├── connection.py # DB connection
+│ ├── models.py # ORM models
+│ ├── executor.py # Query executor
+│ ├── repository.py # Data access
+│ ├── schema.py # Schema definitions
+│ └── migrations/ # Alembic
 ├── auth/
-│   ├── __init__.py
-│   ├── models.py        # User, Role models
-│   ├── service.py       # Auth logic
-│   ├── rbac.py          # RBAC
-│   └── dependencies.py  # FastAPI deps
+│ ├── __init__.py
+│ ├── models.py # User, Role models
+│ ├── service.py # Auth logic
+│ ├── rbac.py # RBAC
+│ └── dependencies.py # FastAPI deps
 ├── observability/
-│   ├── __init__.py
-│   ├── logging_config.py
-│   └── metrics.py       # Prometheus
+│ ├── __init__.py
+│ ├── logging_config.py
+│ └── metrics.py # Prometheus
 ├── config/
-│   ├── __init__.py
-│   └── settings.py      # Configuration
+│ ├── __init__.py
+│ └── settings.py # Configuration
 ├── semantic/
-│   ├── __init__.py
-│   ├── interface.py
-│   ├── embeddings.py
-│   └── chroma_store.py
+│ ├── __init__.py
+│ ├── interface.py
+│ ├── embeddings.py
+│ └── chroma_store.py
 └── tests/
-    ├── __init__.py
-    ├── test_api.py
-    └── test_safety.py
+ ├── __init__.py
+ ├── test_api.py
+ └── test_safety.py
 ```
 
 ### Naming Conventions
@@ -337,12 +337,12 @@ test(auth): add unit tests for JWT validation
 ```
 backend/tests/
 ├── __init__.py
-├── conftest.py          # Pytest fixtures
-├── test_api.py          # API endpoint tests
-├── test_safety.py       # Safety validator tests
-├── test_llm.py          # LLM client tests
-├── test_auth.py         # Auth tests
-└── test_integration.py  # Integration tests
+├── conftest.py # Pytest fixtures
+├── test_api.py # API endpoint tests
+├── test_safety.py # Safety validator tests
+├── test_llm.py # LLM client tests
+├── test_auth.py # Auth tests
+└── test_integration.py # Integration tests
 ```
 
 ### Running Tests
@@ -389,24 +389,24 @@ from backend.api.main import app
 client = TestClient(app)
 
 def test_query_endpoint():
-    # Login
-    response = client.post(
-        "/api/v1/auth/login",
-        data={"username": "admin", "password": "admin123"}
-    )
-    token = response.json()["access_token"]
-    
-    # Query
-    response = client.post(
-        "/api/v1/query/",
-        headers={"Authorization": f"Bearer {token}"},
-        json={"question": "What is total revenue?"}
-    )
-    
-    assert response.status_code == 200
-    data = response.json()
-    assert "generated_sql" in data
-    assert "results" in data
+ # Login
+ response = client.post(
+ "/api/v1/auth/login",
+ data={"username": "admin", "password": "admin123"}
+ )
+ token = response.json()["access_token"]
+ 
+ # Query
+ response = client.post(
+ "/api/v1/query/",
+ headers={"Authorization": f"Bearer {token}"},
+ json={"question": "What is total revenue?"}
+ )
+ 
+ assert response.status_code == 200
+ data = response.json()
+ assert "generated_sql" in data
+ assert "results" in data
 ```
 
 **Example - Unit Test:**
@@ -416,13 +416,13 @@ from backend.safety.validator import SQLValidator
 from backend.auth.models import User, RoleEnum
 
 def test_sql_validator_blocks_drop():
-    user = User(username="test", roles=[RoleEnum.ANALYST])
-    validator = SQLValidator(user)
-    
-    is_valid, error = validator.validate("DROP TABLE users;")
-    
-    assert is_valid is False
-    assert "DROP" in error
+ user = User(username="test", roles=[RoleEnum.ANALYST])
+ validator = SQLValidator(user)
+ 
+ is_valid, error = validator.validate("DROP TABLE users;")
+ 
+ assert is_valid is False
+ assert "DROP" in error
 ```
 
 ### Test Fixtures
@@ -434,26 +434,26 @@ from backend.database.connection import SessionLocal
 
 @pytest.fixture
 def db_session():
-    """Provide a database session for tests."""
-    session = SessionLocal()
-    try:
-        yield session
-    finally:
-        session.close()
+ """Provide a database session for tests."""
+ session = SessionLocal()
+ try:
+ yield session
+ finally:
+ session.close()
 
 @pytest.fixture
 def admin_user(db_session):
-    """Create an admin user for testing."""
-    from backend.auth.models import User, RoleEnum
-    
-    user = User(
-        username="test_admin",
-        email="admin@test.com",
-        roles=[RoleEnum.ADMIN]
-    )
-    db_session.add(user)
-    db_session.commit()
-    return user
+ """Create an admin user for testing."""
+ from backend.auth.models import User, RoleEnum
+ 
+ user = User(
+ username="test_admin",
+ email="admin@test.com",
+ roles=[RoleEnum.ADMIN]
+ )
+ db_session.add(user)
+ db_session.commit()
+ return user
 ```
 
 ---
@@ -507,26 +507,26 @@ mypy backend/
 
 ```python
 def execute_query(sql: str, user: User) -> List[Dict[str, Any]]:
-    """
-    Execute a validated SQL query and return results.
-    
-    Args:
-        sql: The SQL query to execute
-        user: The user executing the query (for access control)
-    
-    Returns:
-        List of dictionaries representing rows
-    
-    Raises:
-        QueryExecutionError: If query execution fails
-        ValidationError: If query doesn't pass safety checks
-    
-    Example:
-        >>> result = execute_query("SELECT * FROM sales LIMIT 5;", admin_user)
-        >>> len(result)
-        5
-    """
-    pass
+ """
+ Execute a validated SQL query and return results.
+ 
+ Args:
+ sql: The SQL query to execute
+ user: The user executing the query (for access control)
+ 
+ Returns:
+ List of dictionaries representing rows
+ 
+ Raises:
+ QueryExecutionError: If query execution fails
+ ValidationError: If query doesn't pass safety checks
+ 
+ Example:
+ >>> result = execute_query("SELECT * FROM sales LIMIT 5;", admin_user)
+ >>> len(result)
+ 5
+ """
+ pass
 ```
 
 ---
@@ -541,40 +541,40 @@ def execute_query(sql: str, user: User) -> List[Dict[str, Any]]:
 # backend/llm/client.py
 
 class LocalLLMClient(LLMClient):
-    """Client for local LLM server (e.g., Ollama)."""
-    
-    def __init__(self):
-        self.base_url = settings.LOCAL_LLM_URL
-        self.model = settings.LOCAL_LLM_MODEL
-    
-    def generate_sql(self, prompt: str) -> str:
-        import requests
-        
-        response = requests.post(
-            f"{self.base_url}/generate",
-            json={"prompt": prompt, "model": self.model}
-        )
-        return response.json()["text"]
-    
-    def explain_sql(self, sql: str, question: str) -> str:
-        # Implementation
-        pass
+ """Client for local LLM server (e.g., Ollama)."""
+ 
+ def __init__(self):
+ self.base_url = settings.LOCAL_LLM_URL
+ self.model = settings.LOCAL_LLM_MODEL
+ 
+ def generate_sql(self, prompt: str) -> str:
+ import requests
+ 
+ response = requests.post(
+ f"{self.base_url}/generate",
+ json={"prompt": prompt, "model": self.model}
+ )
+ return response.json()["text"]
+ 
+ def explain_sql(self, sql: str, question: str) -> str:
+ # Implementation
+ pass
 ```
 
 2. **Register in factory:**
 
 ```python
 def get_llm_client() -> LLMClient:
-    provider = settings.LLM_PROVIDER.lower()
-    
-    if provider == "openai":
-        return OpenAILLMClient()
-    elif provider == "anthropic":
-        return AnthropicLLMClient()
-    elif provider == "local":  # NEW
-        return LocalLLMClient()
-    else:
-        return MockLLMClient()
+ provider = settings.LLM_PROVIDER.lower()
+ 
+ if provider == "openai":
+ return OpenAILLMClient()
+ elif provider == "anthropic":
+ return AnthropicLLMClient()
+ elif provider == "local": # NEW
+ return LocalLLMClient()
+ else:
+ return MockLLMClient()
 ```
 
 3. **Add configuration:**
@@ -583,10 +583,10 @@ def get_llm_client() -> LLMClient:
 # backend/config/settings.py
 
 class Settings(BaseSettings):
-    # ... existing settings ...
-    
-    LOCAL_LLM_URL: str = "http://localhost:11434"
-    LOCAL_LLM_MODEL: str = "llama2"
+ # ... existing settings ...
+ 
+ LOCAL_LLM_URL: str = "http://localhost:11434"
+ LOCAL_LLM_MODEL: str = "llama2"
 ```
 
 4. **Add tests:**
@@ -595,9 +595,9 @@ class Settings(BaseSettings):
 # backend/tests/test_llm.py
 
 def test_local_llm_client():
-    client = LocalLLMClient()
-    sql = client.generate_sql("What is total revenue?")
-    assert isinstance(sql, str)
+ client = LocalLLMClient()
+ sql = client.generate_sql("What is total revenue?")
+ assert isinstance(sql, str)
 ```
 
 ### Adding a New API Endpoint
@@ -614,8 +614,8 @@ router = APIRouter(prefix="/api/v1/feature", tags=["Feature"])
 
 @router.get("/")
 async def get_feature(current_user = Depends(get_current_user)):
-    """Get feature data."""
-    return {"message": "Feature endpoint"}
+ """Get feature data."""
+ return {"message": "Feature endpoint"}
 ```
 
 2. **Register router:**
@@ -634,8 +634,8 @@ app.include_router(new_feature.router)
 # backend/tests/test_api.py
 
 def test_new_feature_endpoint():
-    response = client.get("/api/v1/feature/")
-    assert response.status_code == 200
+ response = client.get("/api/v1/feature/")
+ assert response.status_code == 200
 ```
 
 ---
@@ -647,22 +647,22 @@ def test_new_feature_endpoint():
 **VS Code - launch.json:**
 ```json
 {
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "Python: FastAPI",
-      "type": "python",
-      "request": "launch",
-      "module": "uvicorn",
-      "args": [
-        "backend.api.main:app",
-        "--reload",
-        "--port", "8000"
-      ],
-      "jinja": true,
-      "justMyCode": false
-    }
-  ]
+ "version": "0.2.0",
+ "configurations": [
+ {
+ "name": "Python: FastAPI",
+ "type": "python",
+ "request": "launch",
+ "module": "uvicorn",
+ "args": [
+ "backend.api.main:app",
+ "--reload",
+ "--port", "8000"
+ ],
+ "jinja": true,
+ "justMyCode": false
+ }
+ ]
 }
 ```
 
@@ -689,7 +689,7 @@ tail -f logs/app.log | jq
 **View generated SQL:**
 ```python
 # .env
-DEBUG=True  # Enables SQLAlchemy echo
+DEBUG=True # Enables SQLAlchemy echo
 ```
 
 **Inspect database:**
@@ -725,10 +725,10 @@ p.sort_stats('cumulative').print_stats(20)
 # backend/database/models.py
 
 class SalesOrder(Base):
-    __tablename__ = "sales"
-    
-    ORDERNUMBER = Column(Integer, primary_key=True, index=True)
-    COUNTRY = Column(String, index=True)  # Add index
+ __tablename__ = "sales"
+ 
+ ORDERNUMBER = Column(Integer, primary_key=True, index=True)
+ COUNTRY = Column(String, index=True) # Add index
 ```
 
 **Connection pooling:**
@@ -787,7 +787,7 @@ pip install new-package
 # backend/config/settings.py
 
 class Settings(BaseSettings):
-    NEW_SETTING: str = Field(default="value", env="NEW_SETTING")
+ NEW_SETTING: str = Field(default="value", env="NEW_SETTING")
 ```
 
 **Use in code:**
@@ -806,13 +806,13 @@ value = settings.NEW_SETTING
 **.vscode/settings.json:**
 ```json
 {
-  "python.linting.enabled": true,
-  "python.linting.pylintEnabled": false,
-  "python.linting.flake8Enabled": false,
-  "python.formatting.provider": "black",
-  "python.linting.mypyEnabled": true,
-  "editor.formatOnSave": true,
-  "editor.rulers": [100]
+ "python.linting.enabled": true,
+ "python.linting.pylintEnabled": false,
+ "python.linting.flake8Enabled": false,
+ "python.formatting.provider": "black",
+ "python.linting.mypyEnabled": true,
+ "editor.formatOnSave": true,
+ "editor.rulers": [100]
 }
 ```
 
@@ -831,10 +831,10 @@ value = settings.NEW_SETTING
 **Import errors:**
 ```bash
 # Ensure you're in project root
-cd /path/to/Rhenium
+cd /path/to/llm-based-dbms
 
 # Activate venv
-source venv/bin/activate  # or .\venv\Scripts\activate
+source venv/bin/activate # or .\venv\Scripts\activate
 ```
 
 **Database locked:**
@@ -863,6 +863,6 @@ API_PORT=8001
 
 For questions or issues, contact the development team through Eskişehir Technical University's Department of Electrical and Electronics Engineering.
 
-**Team**: Derya Umut Kulalı, Anıl Aydın, Sıla Alhan  
-**Advisor**: Mehmet Fidan  
+**Team**: Derya Umut Kulalı, Anıl Aydın, Sıla Alhan 
+**Advisor**: Mehmet Fidan 
 **Project**: TÜBİTAK 2209-A Research Project

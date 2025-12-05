@@ -1,4 +1,4 @@
-# System Architecture
+﻿# System Architecture
 
 ## Overview
 
@@ -9,33 +9,33 @@ The LLM-based DBMS is designed as a modular, layered system that translates natu
 ### 1. API Layer (`backend/api/`)
 - **Technology**: FastAPI
 - **Responsibilities**:
-    - Handle HTTP requests (`/query`, `/health`, `/schema`).
-    - Request validation using Pydantic models.
-    - Error handling and response formatting.
-    - CORS configuration.
+ - Handle HTTP requests (`/query`, `/health`, `/schema`).
+ - Request validation using Pydantic models.
+ - Error handling and response formatting.
+ - CORS configuration.
 
 ### 2. LLM Orchestration Layer (`backend/llm/`)
 - **Technology**: LangChain, OpenAI API (or Mock)
 - **Responsibilities**:
-    - Construct prompts with database schema and examples.
-    - Interact with the LLM provider.
-    - **Abstraction**: `LLMClient` abstract base class allows swapping providers (e.g., OpenAI vs Local vs Mock).
+ - Construct prompts with database schema and examples.
+ - Interact with the LLM provider.
+ - **Abstraction**: `LLMClient` abstract base class allows swapping providers (e.g., OpenAI vs Local vs Mock).
 
 ### 3. Safety Layer (`backend/safety/`)
 - **Technology**: Python (Regex, Rule-based)
 - **Responsibilities**:
-    - Validate generated SQL before execution.
-    - **Rules**:
-        - Block destructive commands (`DROP`, `DELETE`, `UPDATE`).
-        - Prevent multiple statements (semicolon injection).
-        - Restrict to allowed tables.
+ - Validate generated SQL before execution.
+ - **Rules**:
+ - Block destructive commands (`DROP`, `DELETE`, `UPDATE`).
+ - Prevent multiple statements (semicolon injection).
+ - Restrict to allowed tables.
 
 ### 4. Database Layer (`backend/database/`)
 - **Technology**: SQLAlchemy, SQLite
 - **Responsibilities**:
-    - Manage database connections (`connection.py`).
-    - Define schema metadata (`schema.py`).
-    - Execute raw SQL queries (`executor.py`).
+ - Manage database connections (`connection.py`).
+ - Define schema metadata (`schema.py`).
+ - Execute raw SQL queries (`executor.py`).
 
 ## Data Flow
 

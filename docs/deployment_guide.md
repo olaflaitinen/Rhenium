@@ -1,9 +1,9 @@
-# Deployment Guide
+﻿# Deployment Guide
 
 ## LLM-Based DBMS - Production Deployment Documentation
 
-**Institution**: Eskişehir Technical University, Department of Electrical and Electronics Engineering  
-**Project**: 2025-2026 Design Project | TÜBİTAK 2209-A  
+**Institution**: Eskişehir Technical University, Department of Electrical and Electronics Engineering 
+**Project**: 2025-2026 Design Project | TÜBİTAK 2209-A 
 **Team**: Derya Umut Kulalı, Anıl Aydın, Sıla Alhan | **Advisor**: Mehmet Fidan
 
 ---
@@ -29,21 +29,21 @@
 
 ```
 ┌─────────────┐
-│   Clients   │
+│ Clients │
 └──────┬──────┘
-       │
+ │
 ┌──────▼──────────┐
-│  Load Balancer  │ (Nginx/Traefik)
+│ Load Balancer │ (Nginx/Traefik)
 └──────┬──────────┘
-       │
+ │
 ┌──────▼──────────┐
-│   API Service   │ (FastAPI - Multiple replicas)
+│ API Service │ (FastAPI - Multiple replicas)
 └──────┬──────────┘
-       │
-   ┌───┴───┐
-   │       │
+ │
+ ┌───┴───┐
+ │ │
 ┌──▼──┐ ┌──▼──┐
-│Redis│ │ DB  │ (PostgreSQL)
+│Redis│ │ DB │ (PostgreSQL)
 └─────┘ └─────┘
 ```
 
@@ -81,7 +81,7 @@
 - **Redis**: 7+ (caching layer)
 - **Nginx/Tr aefik**: Latest (reverse proxy)
 
-###  Network Requirements
+### Network Requirements
 
 - Ports 8000 (API), 5432 (PostgreSQL), 6379 (Redis)
 - HTTPS/TLS certificates
@@ -97,8 +97,8 @@
 
 ```bash
 # Clone repository
-git clone https://github.com/olaflaitinen/Rhenium.git
-cd Rhenium
+git clone https://github.com/Japyh/llm-based-dbms.git
+cd llm-based-dbms
 
 # Create environment file
 cp .env.example .env
@@ -115,25 +115,25 @@ API_PORT=8000
 # Database (PostgreSQL for production)
 DATABASE_TYPE=postgresql
 POSTGRES_USER=llmdbms
-POSTGRES_PASSWORD=YOUR_SECURE_PASSWORD_HERE  # CHANGE THIS!
+POSTGRES_PASSWORD=YOUR_SECURE_PASSWORD_HERE # CHANGE THIS!
 POSTGRES_HOST=postgres
 POSTGRES_PORT=5432
 POSTGRES_DB=llmdbms
 
 # JWT Secret (CRITICAL - Use strong secret)
-JWT_SECRET_KEY=YOUR_RANDOM_32_CHAR_SECRET_KEY_HERE  # Generate with: python -c "import secrets; print(secrets.token_urlsafe(32))"
+JWT_SECRET_KEY=YOUR_RANDOM_32_CHAR_SECRET_KEY_HERE # Generate with: python -c "import secrets; print(secrets.token_urlsafe(32))"
 JWT_ALGORITHM=HS256
 JWT_EXPIRE_MINUTES=1440
 
 # LLM Provider
-LLM_PROVIDER=openai  # or anthropic
+LLM_PROVIDER=openai # or anthropic
 OPENAI_API_KEY=sk-your-actual-key-here
 MODEL_NAME=gpt-4-turbo
 
 # Redis
 REDIS_HOST=redis
 REDIS_PORT=6379
-REDIS_PASSWORD=YOUR_REDIS_PASSWORD  # Set a password!
+REDIS_PASSWORD=YOUR_REDIS_PASSWORD # Set a password!
 ENABLE_LLM_CACHE=True
 
 # Safety
@@ -183,146 +183,146 @@ open http://localhost:8000/docs
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:16-alpine
-    container_name: llmdbms-postgres
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./backups:/backups
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    deploy:
-      resources:
-        limits:
-          cpus: '2'
-          memory: 2G
-    restart: unless-stopped
-    networks:
-      - backend
+ postgres:
+ image: postgres:16-alpine
+ container_name: llmdbms-postgres
+ environment:
+ POSTGRES_USER: ${POSTGRES_USER}
+ POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+ POSTGRES_DB: ${POSTGRES_DB}
+ volumes:
+ - postgres_data:/var/lib/postgresql/data
+ - ./backups:/backups
+ healthcheck:
+ test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+ interval: 10s
+ timeout: 5s
+ retries: 5
+ deploy:
+ resources:
+ limits:
+ cpus: '2'
+ memory: 2G
+ restart: unless-stopped
+ networks:
+ - backend
 
-  redis:
-    image: redis:7-alpine
-    container_name: llmdbms-redis
-    command: redis-server --requirepass ${REDIS_PASSWORD}
-    volumes:
-      - redis_data:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 512M
-    restart: unless-stopped
-    networks:
-      - backend
+ redis:
+ image: redis:7-alpine
+ container_name: llmdbms-redis
+ command: redis-server --requirepass ${REDIS_PASSWORD}
+ volumes:
+ - redis_data:/data
+ healthcheck:
+ test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+ interval: 10s
+ timeout: 3s
+ retries: 5
+ deploy:
+ resources:
+ limits:
+ cpus: '1'
+ memory: 512M
+ restart: unless-stopped
+ networks:
+ - backend
 
-  api:
-    build: .
-    container_name: llmdbms-api
-    env_file: .env
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health/liveness"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-    deploy:
-      replicas: 2
-      resources:
-        limits:
-          cpus: '2'
-          memory: 2G
-        reservations:
-          cpus: '1'
-          memory: 1G
-    restart: unless-stopped
-    networks:
-      - backend
-      - frontend
+ api:
+ build: .
+ container_name: llmdbms-api
+ env_file: .env
+ depends_on:
+ postgres:
+ condition: service_healthy
+ redis:
+ condition: service_healthy
+ healthcheck:
+ test: ["CMD", "curl", "-f", "http://localhost:8000/health/liveness"]
+ interval: 30s
+ timeout: 10s
+ retries: 3
+ start_period: 40s
+ deploy:
+ replicas: 2
+ resources:
+ limits:
+ cpus: '2'
+ memory: 2G
+ reservations:
+ cpus: '1'
+ memory: 1G
+ restart: unless-stopped
+ networks:
+ - backend
+ - frontend
 
-  nginx:
-    image: nginx:alpine
-    container_name: llmdbms-nginx
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./ssl:/etc/nginx/ssl:ro
-    depends_on:
-      - api
-    restart: unless-stopped
-    networks:
-      - frontend
+ nginx:
+ image: nginx:alpine
+ container_name: llmdbms-nginx
+ ports:
+ - "80:80"
+ - "443:443"
+ volumes:
+ - ./nginx.conf:/etc/nginx/nginx.conf:ro
+ - ./ssl:/etc/nginx/ssl:ro
+ depends_on:
+ - api
+ restart: unless-stopped
+ networks:
+ - frontend
 
 volumes:
-  postgres_data:
-  redis_data:
+ postgres_data:
+ redis_data:
 
 networks:
-  backend:
-    driver: bridge
-  frontend:
-    driver: bridge
+ backend:
+ driver: bridge
+ frontend:
+ driver: bridge
 ```
 
 **nginx.conf:**
 
 ```nginx
 upstream api_backend {
-    least_conn;
-    server api:8000 max_fails=3 fail_timeout=30s;
+ least_conn;
+ server api:8000 max_fails=3 fail_timeout=30s;
 }
 
 server {
-    listen 80;
-    server_name yourdomain.com;
-    return 301 https://$server_name$request_uri;
+ listen 80;
+ server_name yourdomain.com;
+ return 301 https://$server_name$request_uri;
 }
 
 server {
-    listen 443 ssl http2;
-    server_name yourdomain.com;
+ listen 443 ssl http2;
+ server_name yourdomain.com;
 
-    ssl_certificate /etc/nginx/ssl/cert.pem;
-    ssl_certificate_key /etc/nginx/ssl/key.pem;
-    ssl_protocols TLSv1.2 TLSv1.3;
-    ssl_ciphers HIGH:!aNULL:!MD5;
+ ssl_certificate /etc/nginx/ssl/cert.pem;
+ ssl_certificate_key /etc/nginx/ssl/key.pem;
+ ssl_protocols TLSv1.2 TLSv1.3;
+ ssl_ciphers HIGH:!aNULL:!MD5;
 
-    client_max_body_size 10M;
+ client_max_body_size 10M;
 
-    location / {
-        proxy_pass http://api_backend;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        
-        proxy_connect_timeout 60s;
-        proxy_send_timeout 60s;
-        proxy_read_timeout 60s;
-    }
+ location / {
+ proxy_pass http://api_backend;
+ proxy_set_header Host $host;
+ proxy_set_header X-Real-IP $remote_addr;
+ proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+ proxy_set_header X-Forwarded-Proto $scheme;
+ 
+ proxy_connect_timeout 60s;
+ proxy_send_timeout 60s;
+ proxy_read_timeout 60s;
+ }
 
-    location /metrics {
-        deny all;
-        return 403;
-    }
+ location /metrics {
+ deny all;
+ return 403;
+ }
 }
 ```
 
@@ -347,25 +347,25 @@ kubectl create namespace llmdbms
 ```bash
 # Database credentials
 kubectl create secret generic llmdbms-db-secret \
-  --from-literal=postgres-user=llmdbms \
-  --from-literal=postgres-password=YOUR_SECURE_PASSWORD \
-  --from-literal=postgres-db=llmdbms \
-  -n llmdbms
+ --from-literal=postgres-user=llmdbms \
+ --from-literal=postgres-password=YOUR_SECURE_PASSWORD \
+ --from-literal=postgres-db=llmdbms \
+ -n llmdbms
 
 # JWT secret
 kubectl create secret generic llmdbms-jwt-secret \
-  --from-literal=jwt-secret-key=$(python -c "import secrets; print(secrets.token_urlsafe(32))") \
-  -n llmdbms
+ --from-literal=jwt-secret-key=$(python -c "import secrets; print(secrets.token_urlsafe(32))") \
+ -n llmdbms
 
 # LLM API keys
 kubectl create secret generic llmdbms-llm-secret \
-  --from-literal=openai-api-key=sk-your-key \
-  -n llmdbms
+ --from-literal=openai-api-key=sk-your-key \
+ -n llmdbms
 
 # Redis password
 kubectl create secret generic llmdbms-redis-secret \
-  --from-literal=redis-password=YOUR_REDIS_PASSWORD \
-  -n llmdbms
+ --from-literal=redis-password=YOUR_REDIS_PASSWORD \
+ -n llmdbms
 ```
 
 ### 3. Apply ConfigMap
@@ -380,21 +380,21 @@ kubectl apply -f k8s/configmap.yaml -n llmdbms
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: llmdbms-config
-  namespace: llmdbms
+ name: llmdbms-config
+ namespace: llmdbms
 data:
-  ENVIRONMENT: "production"
-  API_HOST: "0.0.0.0"
-  API_PORT: "8000"
-  DATABASE_TYPE: "postgresql"
-  POSTGRES_HOST: "postgres-service"
-  POSTGRES_PORT: "5432"
-  REDIS_HOST: "redis-service"
-  REDIS_PORT: "6379"
-  LLM_PROVIDER: "openai"
-  MODEL_NAME: "gpt-4-turbo"
-  SAFETY_MODE: "strict"
-  LOG_LEVEL: "INFO"
+ ENVIRONMENT: "production"
+ API_HOST: "0.0.0.0"
+ API_PORT: "8000"
+ DATABASE_TYPE: "postgresql"
+ POSTGRES_HOST: "postgres-service"
+ POSTGRES_PORT: "5432"
+ REDIS_HOST: "redis-service"
+ REDIS_PORT: "6379"
+ LLM_PROVIDER: "openai"
+ MODEL_NAME: "gpt-4-turbo"
+ SAFETY_MODE: "strict"
+ LOG_LEVEL: "INFO"
 ```
 
 ### 4. Deploy PostgreSQL
@@ -404,52 +404,52 @@ data:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres
-  namespace: llmdbms
+ name: postgres
+ namespace: llmdbms
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: postgres
-  template:
-    metadata:
-      labels:
-        app: postgres
-    spec:
-      containers:
-      - name: postgres
-        image: postgres:16-alpine
-        envFrom:
-        - secretRef:
-            name: llmdbms-db-secret
-        ports:
-        - containerPort: 5432
-        volumeMounts:
-        - name: postgres-storage
-          mountPath: /var/lib/postgresql/data
-        resources:
-          requests:
-            memory: "1Gi"
-            cpu: "500m"
-          limits:
-            memory: "2Gi"
-            cpu: "1000m"
-      volumes:
-      - name: postgres-storage
-        persistentVolumeClaim:
-          claimName: postgres-pvc
+ replicas: 1
+ selector:
+ matchLabels:
+ app: postgres
+ template:
+ metadata:
+ labels:
+ app: postgres
+ spec:
+ containers:
+ - name: postgres
+ image: postgres:16-alpine
+ envFrom:
+ - secretRef:
+ name: llmdbms-db-secret
+ ports:
+ - containerPort: 5432
+ volumeMounts:
+ - name: postgres-storage
+ mountPath: /var/lib/postgresql/data
+ resources:
+ requests:
+ memory: "1Gi"
+ cpu: "500m"
+ limits:
+ memory: "2Gi"
+ cpu: "1000m"
+ volumes:
+ - name: postgres-storage
+ persistentVolumeClaim:
+ claimName: postgres-pvc
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres-service
-  namespace: llmdbms
+ name: postgres-service
+ namespace: llmdbms
 spec:
-  selector:
-    app: postgres
-  ports:
-  - port: 5432
-    targetPort: 5432
+ selector:
+ app: postgres
+ ports:
+ - port: 5432
+ targetPort: 5432
 ```
 
 ### 5. Deploy API
@@ -466,28 +466,28 @@ kubectl apply -f k8s/service.yaml -n llmdbms
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: llmdbms-ingress
-  namespace: llmdbms
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+ name: llmdbms-ingress
+ namespace: llmdbms
+ annotations:
+ cert-manager.io/cluster-issuer: letsencrypt-prod
+ nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
-  ingressClassName: nginx
-  tls:
-  - hosts:
-    - api.yourdomain.com
-    secretName: llmdbms-tls
-  rules:
-  - host: api.yourdomain.com
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: llmdbms-api-service
-            port:
-              number: 8000
+ ingressClassName: nginx
+ tls:
+ - hosts:
+ - api.yourdomain.com
+ secretName: llmdbms-tls
+ rules:
+ - host: api.yourdomain.com
+ http:
+ paths:
+ - path: /
+ pathType: Prefix
+ backend:
+ service:
+ name: llmdbms-api-service
+ port:
+ number: 8000
 ```
 
 ### 7. Apply Ingress
@@ -529,9 +529,9 @@ copilot app init llmdbms
 
 # Create service
 copilot svc init \
-  --name api \
-  --svc-type "Load Balanced Web Service" \
-  --dockerfile ./Dockerfile
+ --name api \
+ --svc-type "Load Balanced Web Service" \
+ --dockerfile ./Dockerfile
 
 # Deploy
 copilot svc deploy --name api --env production
@@ -545,12 +545,12 @@ gcloud builds submit --tag gcr.io/PROJECT_ID/llmdbms
 
 # Deploy
 gcloud run deploy llmdbms \
-  --image gcr.io/PROJECT_ID/llmdbms \
-  --platform managed \
-  --region us-central1 \
-  --allow-unauthenticated \
-  --set-env-vars="ENVIRONMENT=production" \
-  --set-secrets="JWT_SECRET_KEY=jwt-secret:latest"
+ --image gcr.io/PROJECT_ID/llmdbms \
+ --platform managed \
+ --region us-central1 \
+ --allow-unauthenticated \
+ --set-env-vars="ENVIRONMENT=production" \
+ --set-secrets="JWT_SECRET_KEY=jwt-secret:latest"
 ```
 
 ### Azure (Container Instances)
@@ -561,15 +561,15 @@ az group create --name llmdbms-rg --location eastus
 
 # Create container
 az container create \
-  --resource-group llmdbms-rg \
-  --name llmdbms \
-  --image your-registry/llmdbms:latest \
-  --dns-name-label llmdbms-api \
-  --ports 8000 \
-  --environment-variables \
-    ENVIRONMENT=production \
-  --secure-environment-variables \
-    JWT_SECRET_KEY=$JWT_SECRET
+ --resource-group llmdbms-rg \
+ --name llmdbms \
+ --image your-registry/llmdbms:latest \
+ --dns-name-label llmdbms-api \
+ --ports 8000 \
+ --environment-variables \
+ ENVIRONMENT=production \
+ --secure-environment-variables \
+ JWT_SECRET_KEY=$JWT_SECRET
 ```
 
 ---
@@ -606,9 +606,9 @@ certbot certonly --standalone -d yourdomain.com
 
 ```bash
 # Allow only necessary ports
-ufw allow 22/tcp   # SSH
-ufw allow 80/tcp   # HTTP
-ufw allow 443/tcp  # HTTPS
+ufw allow 22/tcp # SSH
+ufw allow 80/tcp # HTTP
+ufw allow 443/tcp # HTTPS
 ufw enable
 ```
 
@@ -642,33 +642,33 @@ Access metrics at: `http://localhost:9090/metrics`
 ```yaml
 # docker-compose.monitoring.yml
 services:
-  prometheus:
-    image: prom/prometheus
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    ports:
-      - "9090:9090"
+ prometheus:
+ image: prom/prometheus
+ volumes:
+ - ./prometheus.yml:/etc/prometheus/prometheus.yml
+ ports:
+ - "9090:9090"
 
-  grafana:
-    image: grafana/grafana
-    ports:
-      - "3000:3000"
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+ grafana:
+ image: grafana/grafana
+ ports:
+ - "3000:3000"
+ environment:
+ - GF_SECURITY_ADMIN_PASSWORD=admin
 ```
 
 ### Log Aggregation
 
 **Using ELK Stack:**
 ```yaml
-  elasticsearch:
-    image: elasticsearch:8.11.0
-  
-  logstash:
-    image: logstash:8.11.0
-  
-  kibana:
-    image: kibana:8.11.0
+ elasticsearch:
+ image: elasticsearch:8.11.0
+ 
+ logstash:
+ image: logstash:8.11.0
+ 
+ kibana:
+ image: kibana:8.11.0
 ```
 
 ---
@@ -688,7 +688,7 @@ BACKUP_DIR="/backups"
 
 # PostgreSQL backup
 docker-compose exec -T postgres pg_dump \
-  -U llmdbms llmdbms > $BACKUP_DIR/db_$TIMESTAMP.sql
+ -U llmdbms llmdbms > $BACKUP_DIR/db_$TIMESTAMP.sql
 
 # Compress
 gzip $BACKUP_DIR/db_$TIMESTAMP.sql
@@ -707,7 +707,7 @@ find $BACKUP_DIR -name "db_*.sql.gz" -mtime +7 -delete
 ```bash
 # Restore from backup
 gunzip -c /backups/db_20250101_020000.sql.gz | \
-  docker-compose exec -T postgres psql -U llmdbms -d llmdbms
+ docker-compose exec -T postgres psql -U llmdbms -d llmdbms
 ```
 
 ---
@@ -766,9 +766,9 @@ docker stats
 
 ---
 
-**For production support, contact**:  
-Eskişehir Technical University  
+**For production support, contact**: 
+Eskişehir Technical University 
 Department of Electrical and Electronics Engineering
 
-**Team**: Derya Umut Kulalı, Anıl Aydın, Sıla Alhan  
+**Team**: Derya Umut Kulalı, Anıl Aydın, Sıla Alhan 
 **Advisor**: Mehmet Fidan

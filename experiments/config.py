@@ -1,4 +1,4 @@
-"""
+﻿"""
 Experiment Configuration Models.
 
 Defines the schema for running Text-to-SQL experiments.

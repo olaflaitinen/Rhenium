@@ -1,4 +1,4 @@
-"""
+﻿"""
 Embedding Service.
 
 Handles generation of embeddings for text using Sentence Transformers

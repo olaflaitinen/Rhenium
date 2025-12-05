@@ -1,4 +1,4 @@
-"""
+﻿"""
 Authentication service for user management and JWT tokens.
 
 Provides:

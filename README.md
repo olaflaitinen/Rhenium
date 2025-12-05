@@ -1,10 +1,10 @@
-# LLM-Based Database Management System
+﻿# LLM-Based Database Management System
 
 **A Research-Grade Natural Language Interface for Relational Databases**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/olaflaitinen/Rhenium/actions)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/Japyh/llm-based-dbms/actions)
 [![TÜBİTAK 2209-A](https://img.shields.io/badge/Supported%20by-T%C3%9CB%C4%B0TAK%202209--A-red.svg)](https://www.tubitak.gov.tr/)
 
 ---
@@ -59,14 +59,14 @@ The project serves a dual purpose:
 
 - **Natural Language to SQL**: Converts complex user questions into executable SQL queries using advanced LLMs (OpenAI GPT-4, Anthropic Claude, or local models).
 - **Enterprise-Grade Security**:
-  - **Role-Based Access Control (RBAC)**: Granular permissions (Admin, Data Scientist, Analyst, Viewer) enforcing table and column-level access.
-  - **SQL Safety Engine**: AST-based parsing and validation to prevent SQL injection and destructive operations (DROP, DELETE).
+ - **Role-Based Access Control (RBAC)**: Granular permissions (Admin, Data Scientist, Analyst, Viewer) enforcing table and column-level access.
+ - **SQL Safety Engine**: AST-based parsing and validation to prevent SQL injection and destructive operations (DROP, DELETE).
 - **Multi-LLM Support**: Abstracted client layer allowing seamless switching between different LLM providers for benchmarking and cost optimization.
 - **Explainability**: Optional natural language explanations of the generated SQL to build user trust.
 - **Production Infrastructure**:
-  - **FastAPI Backend**: High-performance, asynchronous REST API.
-  - **Structured Logging**: Comprehensive JSON logging for observability.
-  - **Dockerized Deployment**: Full containerization with Docker Compose (API + PostgreSQL + Redis).
+ - **FastAPI Backend**: High-performance, asynchronous REST API.
+ - **Structured Logging**: Comprehensive JSON logging for observability.
+ - **Dockerized Deployment**: Full containerization with Docker Compose (API + PostgreSQL + Redis).
 - **Research Evaluation Framework**: Built-in scripts to evaluate Text-to-SQL performance using exact matching and result set equivalence metrics.
 
 ---
@@ -77,37 +77,37 @@ The system follows a layered microservices-ready architecture:
 
 ```text
 User Request (Natural Language)
-       │
-       ▼
+ │
+ ▼
 ┌───────────────────┐
-│   API Gateway     │  (FastAPI, Auth, Rate Limiting)
+│ API Gateway │ (FastAPI, Auth, Rate Limiting)
 └────────┬──────────┘
-         │
-         ▼
+ │
+ ▼
 ┌───────────────────┐
-│  Orchestrator     │  (LangChain, Prompt Management)
+│ Orchestrator │ (LangChain, Prompt Management)
 └────────┬──────────┘
-         │
-    ┌────┴────┐
-    ▼         ▼
+ │
+ ┌────┴────┐
+ ▼ ▼
 ┌───────┐ ┌───────┐
-│  LLM  │ │Vector │  (Optional Semantic Search)
+│ LLM │ │Vector │ (Optional Semantic Search)
 │Service│ │ Store │
 └───┬───┘ └───┬───┘
-    │         │
-    ▼         ▼
+ │ │
+ ▼ ▼
 ┌───────────────────┐
-│ Generated SQL     │
+│ Generated SQL │
 └────────┬──────────┘
-         │
-         ▼
+ │
+ ▼
 ┌───────────────────┐
-│  Safety Engine    │  (sqlparse, Policy Validation)
+│ Safety Engine │ (sqlparse, Policy Validation)
 └────────┬──────────┘
-         │
-         ▼
+ │
+ ▼
 ┌───────────────────┐
-│  Query Executor   │  (SQLAlchemy, PostgreSQL/SQLite)
+│ Query Executor │ (SQLAlchemy, PostgreSQL/SQLite)
 └───────────────────┘
 ```
 
@@ -118,20 +118,20 @@ User Request (Natural Language)
 ```text
 llm-based-dbms/
 ├── backend/
-│   ├── api/              # REST API endpoints (Routers, Schemas, Middleware)
-│   ├── auth/             # Authentication, JWT, and RBAC services
-│   ├── database/         # Database models, connection pooling, and executors
-│   ├── llm/              # LLM client implementations and prompt templates
-│   ├── safety/           # SQL validation and policy enforcement engine
-│   ├── observability/    # Structured logging and metrics configuration
-│   └── config/           # Environment-based configuration management
-├── scripts/              # Utility scripts (Database init, Server startup)
-├── experiments/          # Evaluation datasets and benchmarking scripts
-├── docs/                 # Detailed architectural and research documentation
-├── tests/                # Unit and integration tests
-├── docker-compose.yml    # Production deployment configuration
-├── Dockerfile            # Multi-stage Docker build definition
-└── requirements.txt      # Python dependencies
+│ ├── api/ # REST API endpoints (Routers, Schemas, Middleware)
+│ ├── auth/ # Authentication, JWT, and RBAC services
+│ ├── database/ # Database models, connection pooling, and executors
+│ ├── llm/ # LLM client implementations and prompt templates
+│ ├── safety/ # SQL validation and policy enforcement engine
+│ ├── observability/ # Structured logging and metrics configuration
+│ └── config/ # Environment-based configuration management
+├── scripts/ # Utility scripts (Database init, Server startup)
+├── experiments/ # Evaluation datasets and benchmarking scripts
+├── docs/ # Detailed architectural and research documentation
+├── tests/ # Unit and integration tests
+├── docker-compose.yml # Production deployment configuration
+├── Dockerfile # Multi-stage Docker build definition
+└── requirements.txt # Python dependencies
 ```
 
 ---
@@ -146,25 +146,25 @@ llm-based-dbms/
 ### Installation
 
 1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/olaflaitinen/Rhenium.git
-   cd Rhenium
-   ```
+ ```bash
+ git clone https://github.com/Japyh/llm-based-dbms.git
+ cd llm-based-dbms
+ ```
 
 2. **Create and activate a virtual environment:**
-   ```bash
-   python -m venv venv
-   # Windows
-   .\venv\Scripts\activate
-   # Linux/macOS
-   source venv/bin/activate
-   ```
+ ```bash
+ python -m venv venv
+ # Windows
+ .\venv\Scripts\activate
+ # Linux/macOS
+ source venv/bin/activate
+ ```
 
 3. **Install dependencies:**
-   ```bash
-   pip install -r requirements-minimal.txt
-   pip install email-validator
-   ```
+ ```bash
+ pip install -r requirements-minimal.txt
+ pip install email-validator
+ ```
 
 ---
 
@@ -181,13 +181,13 @@ cp .env.example .env
 ```ini
 # Core
 ENVIRONMENT=development
-DATABASE_TYPE=sqlite  # or postgresql
+DATABASE_TYPE=sqlite # or postgresql
 
 # Authentication (CHANGE IN PRODUCTION)
 JWT_SECRET_KEY=your-secure-secret-key-min-32-chars
 
 # LLM Provider
-LLM_PROVIDER=openai   # options: openai, anthropic, mock
+LLM_PROVIDER=openai # options: openai, anthropic, mock
 OPENAI_API_KEY=sk-...
 MODEL_NAME=gpt-4-turbo
 
@@ -217,7 +217,7 @@ Start the development server using the provided script:
 python scripts/run_dev_server.py
 ```
 
-The API will be available at: `http://localhost:8000`  
+The API will be available at: `http://localhost:8000` 
 Interactive API Documentation (Swagger UI): `http://localhost:8000/docs`
 
 ---
@@ -229,8 +229,8 @@ First, obtain an access token using the default admin credentials (`admin` / `ad
 
 ```bash
 curl -X POST "http://localhost:8000/api/v1/auth/login" \
-     -H "Content-Type: application/x-www-form-urlencoded" \
-     -d "username=admin&password=admin123"
+ -H "Content-Type: application/x-www-form-urlencoded" \
+ -d "username=admin&password=admin123"
 ```
 
 ### 2. Natural Language Query
@@ -238,24 +238,24 @@ Send a natural language question to the API:
 
 ```bash
 curl -X POST "http://localhost:8000/api/v1/query/" \
-     -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
-     -H "Content-Type: application/json" \
-     -d '{
-           "question": "What are the top 3 products by sales revenue in 2003?",
-           "explain": true
-         }'
+ -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
+ -H "Content-Type: application/json" \
+ -d '{
+ "question": "What are the top 3 products by sales revenue in 2003?",
+ "explain": true
+ }'
 ```
 
 **Response:**
 ```json
 {
-  "sql": "SELECT PRODUCTCODE, SUM(SALES) as total_sales FROM sales_orders WHERE YEAR_ID = 2003 GROUP BY PRODUCTCODE ORDER BY total_sales DESC LIMIT 3;",
-  "result": [
-    {"PRODUCTCODE": "S18_3232", "total_sales": 150200.50},
-    {"PRODUCTCODE": "S10_1949", "total_sales": 145000.00},
-    {"PRODUCTCODE": "S12_1108", "total_sales": 138500.25}
-  ],
-  "explanation": "This query calculates the total sales for each product in the year 2003, sorts them in descending order, and returns the top 3."
+ "sql": "SELECT PRODUCTCODE, SUM(SALES) as total_sales FROM sales_orders WHERE YEAR_ID = 2003 GROUP BY PRODUCTCODE ORDER BY total_sales DESC LIMIT 3;",
+ "result": [
+ {"PRODUCTCODE": "S18_3232", "total_sales": 150200.50},
+ {"PRODUCTCODE": "S10_1949", "total_sales": 145000.00},
+ {"PRODUCTCODE": "S12_1108", "total_sales": 138500.25}
+ ],
+ "explanation": "This query calculates the total sales for each product in the year 2003, sorts them in descending order, and returns the top 3."
 }
 ```
 
@@ -283,23 +283,23 @@ This project is executed by a multidisciplinary team of engineering students at 
 
 ### Student Team Members
 
-- **Derya Umut Kulalı**  
-  *Principal Investigator / Project Lead*  
-  Department of Electrical and Electronics Engineering
+- **Derya Umut Kulalı** 
+ *Principal Investigator / Project Lead* 
+ Department of Electrical and Electronics Engineering
 
-- **Anıl Aydın**  
-  *Research Team Member*  
-  Department of Electrical and Electronics Engineering
+- **Anıl Aydın** 
+ *Research Team Member* 
+ Department of Electrical and Electronics Engineering
 
-- **Sıla Alhan**  
-  *Research Team Member*  
-  Department of Electrical and Electronics Engineering
+- **Sıla Alhan** 
+ *Research Team Member* 
+ Department of Electrical and Electronics Engineering
 
 ### Academic Supervision
 
-- **Mehmet Fidan**  
-  *Academic Advisor*  
-  Department of Electrical and Electronics Engineering
+- **Mehmet Fidan** 
+ *Academic Advisor* 
+ Department of Electrical and Electronics Engineering
 
 The team structure is intentionally designed to cover the full spectrum of the system's requirements, from high-level software architecture and API design to efficient data processing and system optimization.
 
@@ -319,12 +319,12 @@ If you use this project or its methodology in your research, please cite it as f
 
 ```bibtex
 @misc{kulali2025llmdbms,
-  author = {Kulalı, Derya Umut and Aydın, Anıl and Alhan, Sıla and Fidan, Mehmet},
-  title = {LLM Based Database Management System: A Natural Language Interface for Relational Databases},
-  year = {2025},
-  publisher = {GitHub},
-  journal = {TÜBİTAK 2209-A Research Project},
-  howpublished = {\url{https://github.com/olaflaitinen/Rhenium}}
+ author = {Kulalı, Derya Umut and Aydın, Anıl and Alhan, Sıla and Fidan, Mehmet},
+ title = {LLM Based Database Management System: A Natural Language Interface for Relational Databases},
+ year = {2025},
+ publisher = {GitHub},
+ journal = {TÜBİTAK 2209-A Research Project},
+ howpublished = {\url{https://github.com/Japyh/llm-based-dbms}}
 }
 ```
 

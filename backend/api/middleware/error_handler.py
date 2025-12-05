@@ -1,4 +1,4 @@
-"""
+﻿"""
 Global error handling middleware.
 
 Provides consistent error responses and logging for all exceptions.

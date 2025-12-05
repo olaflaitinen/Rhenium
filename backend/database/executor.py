@@ -1,4 +1,4 @@
-"""
+﻿"""
 Enhanced database executor with better error handling and result formatting.
 """
 from typing import List, Dict, Any, Optional

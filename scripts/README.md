@@ -1,4 +1,4 @@
-# Scripts Directory
+﻿# Scripts Directory
 
 Utility scripts for database initialization, development server, and maintenance tasks.
 
@@ -17,8 +17,8 @@ python scripts/init_db.py
 1. Creates all database tables (users, roles, sales_orders, audit_logs)
 2. Initializes default roles (ADMIN, DATA_SCIENTIST, ANALYST, VIEWER)
 3. Creates default admin user:
-   - Username: `admin`
-   - Password: `admin123` ⚠️ **CHANGE IN PRODUCTION!**
+ - Username: `admin`
+ - Password: `admin123` ️ **CHANGE IN PRODUCTION!**
 4. Populates sample sales data (3 sample orders)
 
 **Configuration**:
@@ -36,22 +36,22 @@ Database Type: sqlite
 Database URL: sqlite:///./data/processed/sales.db
 
 Initializing database schema...
-✓ Database schema created.
+ Database schema created.
 
 Initializing default roles...
-✓ Default roles created (ADMIN, DATA_SCIENTIST, ANALYST, VIEWER).
+ Default roles created (ADMIN, DATA_SCIENTIST, ANALYST, VIEWER).
 
 Creating default admin user...
-✓ Created admin user:
-  Username: admin
-  Password: admin123
-  ⚠️  PLEASE CHANGE THIS PASSWORD IN PRODUCTION!
+ Created admin user:
+ Username: admin
+ Password: admin123
+ ️ PLEASE CHANGE THIS PASSWORD IN PRODUCTION!
 
 Inserting sample sales data...
-✓ Inserted 3 sample sales records.
+ Inserted 3 sample sales records.
 
 ==========================================================
-✓ Database initialization complete!
+ Database initialization complete!
 ==========================================================
 ```
 
@@ -101,30 +101,30 @@ from backend.auth.models import User
 from backend.auth.service import AuthService
 
 def update_password():
-    db = SessionLocal()
-    try:
-        admin = db.query(User).filter(User.username == "admin").first()
-        if not admin:
-            print("Admin user not found!")
-            return
-        
-        new_password = input("Enter new password: ")
-        confirm = input("Confirm password: ")
-        
-        if new_password != confirm:
-            print("Passwords don't match!")
-            return
-        
-        # Hash and update password
-        admin.hashed_password = AuthService.hash_password(new_password)
-        db.commit()
-        
-        print("✓ Admin password updated successfully!")
-    finally:
-        db.close()
+ db = SessionLocal()
+ try:
+ admin = db.query(User).filter(User.username == "admin").first()
+ if not admin:
+ print("Admin user not found!")
+ return
+ 
+ new_password = input("Enter new password: ")
+ confirm = input("Confirm password: ")
+ 
+ if new_password != confirm:
+ print("Passwords don't match!")
+ return
+ 
+ # Hash and update password
+ admin.hashed_password = AuthService.hash_password(new_password)
+ db.commit()
+ 
+ print(" Admin password updated successfully!")
+ finally:
+ db.close()
 
 if __name__ == "__main__":
-    update_password()
+ update_password()
 ```
 
 ### Example: Export Data to CSV
@@ -137,30 +137,30 @@ from backend.database.connection import SessionLocal
 from backend.database.models import SalesOrder
 
 def export_to_csv():
-    db = SessionLocal()
-    try:
-        orders = db.query(SalesOrder).all()
-        
-        # Convert to DataFrame
-        data = [
-            {
-                'order_number': o.ORDERNUMBER,
-                'customer': o.CUSTOMERNAME,
-                'sales': o.SALES,
-                'date': o.ORDERDATE
-            }
-            for o in orders
-        ]
-        
-        df = pd.DataFrame(data)
-        df.to_csv('data/exports/sales_export.csv', index=False)
-        
-        print(f"✓ Exported {len(orders)} orders to CSV")
-    finally:
-        db.close()
+ db = SessionLocal()
+ try:
+ orders = db.query(SalesOrder).all()
+ 
+ # Convert to DataFrame
+ data = [
+ {
+ 'order_number': o.ORDERNUMBER,
+ 'customer': o.CUSTOMERNAME,
+ 'sales': o.SALES,
+ 'date': o.ORDERDATE
+ }
+ for o in orders
+ ]
+ 
+ df = pd.DataFrame(data)
+ df.to_csv('data/exports/sales_export.csv', index=False)
+ 
+ print(f" Exported {len(orders)} orders to CSV")
+ finally:
+ db.close()
 
 if __name__ == "__main__":
-    export_to_csv()
+ export_to_csv()
 ```
 
 ### Example: Database Backup
@@ -177,14 +177,14 @@ mkdir -p $BACKUP_DIR
 
 # SQLite backup
 if [ -f "data/processed/sales.db" ]; then
-    cp data/processed/sales.db $BACKUP_DIR/sales_${TIMESTAMP}.db
-    echo "✓ SQLite backup created: $BACKUP_DIR/sales_${TIMESTAMP}.db"
+ cp data/processed/sales.db $BACKUP_DIR/sales_${TIMESTAMP}.db
+ echo " SQLite backup created: $BACKUP_DIR/sales_${TIMESTAMP}.db"
 fi
 
 # PostgreSQL backup (if configured)
 if [ "$DATABASE_TYPE" = "postgresql" ]; then
-    pg_dump -U $POSTGRES_USER -h $POSTGRES_HOST $POSTGRES_DB > $BACKUP_DIR/postgres_${TIMESTAMP}.sql
-    echo "✓ PostgreSQL backup created: $BACKUP_DIR/postgres_${TIMESTAMP}.sql"
+ pg_dump -U $POSTGRES_USER -h $POSTGRES_HOST $POSTGRES_DB > $BACKUP_DIR/postgres_${TIMESTAMP}.sql
+ echo " PostgreSQL backup created: $BACKUP_DIR/postgres_${TIMESTAMP}.sql"
 fi
 ```
 
@@ -193,55 +193,55 @@ fi
 When creating new scripts:
 
 1. **Add shebang** for shell scripts:
-   ```bash
-   #!/bin/bash
-   ```
-   or for Python:
-   ```python
-   #!/usr/bin/env python3
-   ```
+ ```bash
+ #!/bin/bash
+ ```
+ or for Python:
+ ```python
+ #!/usr/bin/env python3
+ ```
 
 2. **Add project root to path**:
-   ```python
-   import sys
-   from pathlib import Path
-   project_root = Path(__file__).resolve().parent.parent
-   sys.path.append(str(project_root))
-   ```
+ ```python
+ import sys
+ from pathlib import Path
+ project_root = Path(__file__).resolve().parent.parent
+ sys.path.append(str(project_root))
+ ```
 
 3. **Use proper imports**:
-   ```python
-   from backend.database.connection import SessionLocal
-   from backend.config.settings import settings
-   ```
+ ```python
+ from backend.database.connection import SessionLocal
+ from backend.config.settings import settings
+ ```
 
 4. **Add docstrings**:
-   ```python
-   """
-   Script description.
-   
-   Usage:
-       python scripts/script_name.py [args]
-   """
-   ```
+ ```python
+ """
+ Script description.
+ 
+ Usage:
+ python scripts/script_name.py [args]
+ """
+ ```
 
 5. **Handle errors gracefully**:
-   ```python
-   try:
-       # Main logic
-   except Exception as e:
-       print(f"Error: {e}")
-       sys.exit(1)
-   ```
+ ```python
+ try:
+ # Main logic
+ except Exception as e:
+ print(f"Error: {e}")
+ sys.exit(1)
+ ```
 
 6. **Close database connections**:
-   ```python
-   db = SessionLocal()
-   try:
-       # Database operations
-   finally:
-       db.close()
-   ```
+ ```python
+ db = SessionLocal()
+ try:
+ # Database operations
+ finally:
+ db.close()
+ ```
 
 ## Running Scripts
 
@@ -299,14 +299,14 @@ chmod +x scripts/*.sh
 
 ## Best Practices
 
-1. ✅ Always use `SessionLocal()` for database operations
-2. ✅ Close database connections in `finally` blocks
-3. ✅ Add helpful output messages
-4. ✅ Include error handling
-5. ✅ Document usage in docstrings
-6. ✅ Test scripts before committing
-7. ✅ Use environment variables for configuration
-8. ✅ Add scripts to `.gitignore` if they contain sensitive data
+1. Always use `SessionLocal()` for database operations
+2. Close database connections in `finally` blocks
+3. Add helpful output messages
+4. Include error handling
+5. Document usage in docstrings
+6. Test scripts before committing
+7. Use environment variables for configuration
+8. Add scripts to `.gitignore` if they contain sensitive data
 
 ## Security Notes
 

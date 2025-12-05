@@ -1,4 +1,4 @@
-# Security Policy
+﻿# Security Policy
 
 ## Reporting a Vulnerability
 
@@ -9,27 +9,27 @@ The LLM-Based DBMS project takes security seriously. If you discover a security 
 1. **Do NOT** open a public GitHub issue for security vulnerabilities
 2. Contact the project team directly through Eskişehir Technical University's Department of Electrical and Electronics Engineering
 3. Provide detailed information about the vulnerability:
-   - Type of vulnerability
-   - Steps to reproduce
-   - Potential impact
-   - Suggested fix (if available)
+ - Type of vulnerability
+ - Steps to reproduce
+ - Potential impact
+ - Suggested fix (if available)
 
 ### What to Expect
 
 - **Initial Response**: Within 48 hours
 - **Status Updates**: Every 72 hours until resolved
 - **Resolution Timeline**: Depends on severity
-  - Critical: 7 days
-  - High: 14 days
-  - Medium: 30 days
-  - Low: 60 days
+ - Critical: 7 days
+ - High: 14 days
+ - Medium: 30 days
+ - Low: 60 days
 
 ## Supported Versions
 
-| Version | Supported          |
+| Version | Supported |
 | ------- | ------------------ |
-| 1.0.x   | :white_check_mark: |
-| < 1.0   | :x:                |
+| 1.0.x | :white_check_mark: |
+| < 1.0 | :x: |
 
 ## Security Features
 
@@ -70,100 +70,100 @@ The LLM-Based DBMS project takes security seriously. If you discover a security 
 #### For Deployment
 
 1. **Always change default credentials**
-   ```bash
-   # Default admin password is admin123 - CHANGE THIS!
-   python scripts/update_admin_password.py
-   ```
+ ```bash
+ # Default admin password is admin123 - CHANGE THIS!
+ python scripts/update_admin_password.py
+ ```
 
 2. **Use strong JWT secrets**
-   ```bash
-   # Generate secure secret
-   python -c "import secrets; print(secrets.token_urlsafe(32))"
-   ```
+ ```bash
+ # Generate secure secret
+ python -c "import secrets; print(secrets.token_urlsafe(32))"
+ ```
 
 3. **Enable HTTPS in production**
-   - Use reverse proxy (nginx, Traefik)
-   - Configure SSL/TLS certificates
-   - Enforce HTTPS redirects
+ - Use reverse proxy (nginx, Traefik)
+ - Configure SSL/TLS certificates
+ - Enforce HTTPS redirects
 
 4. **Restrict CORS origins**
-   ```python
-   # In production, specify exact origins
-   allow_origins=["https://yourdomain.com"]
-   ```
+ ```python
+ # In production, specify exact origins
+ allow_origins=["https://yourdomain.com"]
+ ```
 
 5. **Use PostgreSQL in production**
-   - SQLite is for development only
-   - Configure proper PostgreSQL authentication
-   - Use connection pooling
+ - SQLite is for development only
+ - Configure proper PostgreSQL authentication
+ - Use connection pooling
 
 6. **Enable Redis authentication**
-   ```bash
-   # Set Redis password in .env
-   REDIS_PASSWORD=your_secure_password
-   ```
+ ```bash
+ # Set Redis password in .env
+ REDIS_PASSWORD=your_secure_password
+ ```
 
 7. **Set safety mode to strict**
-   ```bash
-   SAFETY_MODE=strict
-   ALLOW_DANGEROUS_QUERIES=False
-   ```
+ ```bash
+ SAFETY_MODE=strict
+ ALLOW_DANGEROUS_QUERIES=False
+ ```
 
 #### For Development
 
 1. **Never commit secrets**
-   - Use `.env` files (gitignored)
-   - Use environment variables
-   - Rotate API keys regularly
+ - Use `.env` files (gitignored)
+ - Use environment variables
+ - Rotate API keys regularly
 
 2. **Keep dependencies updated**
-   ```bash
-   pip list --outdated
-   pip install --upgrade <package>
-   ```
+ ```bash
+ pip list --outdated
+ pip install --upgrade <package>
+ ```
 
 3. **Run security scans**
-   ```bash
-   # Check for known vulnerabilities
-   pip install safety
-   safety check
-   ```
+ ```bash
+ # Check for known vulnerabilities
+ pip install safety
+ safety check
+ ```
 
 4. **Use mock LLM provider**
-   ```bash
-   # Avoid exposing real API keys in development
-   LLM_PROVIDER=mock
-   ```
+ ```bash
+ # Avoid exposing real API keys in development
+ LLM_PROVIDER=mock
+ ```
 
 ## Known Security Considerations
 
 ### LLM-Specific Risks
 
 1. **Prompt Injection**
-   - Users may attempt to manipulate LLM prompts
-   - **Mitigation**: Structured prompts, output validation
+ - Users may attempt to manipulate LLM prompts
+ - **Mitigation**: Structured prompts, output validation
 
 2. **Data Exposure**
-   - LLM responses may include sensitive schema information
-   - **Mitigation**: RBAC enforcement, response sanitization
+ - LLM responses may include sensitive schema information
+ - **Mitigation**: RBAC enforcement, response sanitization
 
 3. **Cost Attacks**
-   - Excessive queries can incur high LLM API costs
-   - **Mitigation**: Rate limiting, caching, usage quotas
+ - Excessive queries can incur high LLM API costs
+ - **Mitigation**: Rate limiting, caching, usage quotas
 
 ### Database Risks
 
 1. **Schema Inference**
-   - Attackers may infer schema through error messages
-   - **Mitigation**: Generic error messages, audit logging
+ - Attackers may infer schema through error messages
+ - **Mitigation**: Generic error messages, audit logging
 
 2. **Data Exfiltration**
-   - Large SELECT queries may expose data
-   - **Mitigation**: Result size limits, RBAC
+ - Large SELECT queries may expose data
+ - **Mitigation**: Result size limits, RBAC
 
 3. **Resource Exhaustion**
-   - Complex queries may overwhelm database
-   - **Mitigation**: Query timeout, connection pooling
+ - Complex queries may overwhelm database
+ - **Mitigation**: Query timeout, connection pooling
 
 ## Security Checklist for Production
 

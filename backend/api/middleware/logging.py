@@ -1,4 +1,4 @@
-"""
+﻿"""
 Request/Response logging middleware.
 
 Logs all HTTP requests and responses with:

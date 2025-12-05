@@ -1,4 +1,4 @@
-"""
+﻿"""
 Role-Based Access Control (RBAC) implementation.
 
 Provides permission checking and policy enforcement based on user roles.

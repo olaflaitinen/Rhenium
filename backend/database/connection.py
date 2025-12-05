@@ -1,4 +1,4 @@
-"""
+﻿"""
 Database connection management with support for multiple backends.
 
 Supports:

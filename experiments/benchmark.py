@@ -1,4 +1,4 @@
-"""
+﻿"""
 Benchmark Runner.
 
 CLI tool to run experiments based on a configuration file.

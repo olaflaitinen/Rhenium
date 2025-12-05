@@ -1,4 +1,4 @@
-name: "anthropic_claude"
+﻿name: "anthropic_claude"
 description: "Evaluation using Anthropic Claude model"
 version: "1.0.0"
 

@@ -1,4 +1,4 @@
-"""
+﻿"""
 Policy Definitions for SQL Safety Engine.
 
 This module defines the configuration models and default policies for the

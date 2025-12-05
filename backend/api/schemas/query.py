@@ -1,4 +1,4 @@
-"""
+﻿"""
 Query-related schemas for the API.
 
 Defines request/response models for natural language query endpoints.

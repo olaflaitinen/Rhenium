@@ -1,4 +1,4 @@
-"""
+﻿"""
 Database models for application data (non-auth).
 
 Includes:

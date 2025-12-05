@@ -1,4 +1,4 @@
-name: "benchmark_v1"
+﻿name: "benchmark_v1"
 description: "Standard benchmark configuration for Text-to-SQL evaluation"
 version: "1.0.0"
 

@@ -1,4 +1,4 @@
-"""
+﻿"""
 Structured logging configuration using structlog.
 
 Provides JSON-formatted logs for production observability.

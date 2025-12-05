@@ -1,4 +1,4 @@
-"""
+﻿"""
 Health check and monitoring router.
 
 Provides endpoints for:

@@ -1,4 +1,4 @@
-from backend.database.schema import sales_table
+﻿from backend.database.schema import sales_table
 from sqlalchemy.schema import CreateTable
 from sqlalchemy.engine import mock
 

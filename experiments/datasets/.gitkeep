@@ -1,1 +1,36 @@
-# This file keeps the directory in Git
+# Evaluation Datasets Directory
+
+This directory contains datasets for Text-to-SQL evaluation.
+
+Files in this directory are gitignored to allow large datasets without bloating the repository.
+
+## Expected Files
+
+- `sales_queries.json` - Main evaluation dataset with natural language questions and gold SQL
+- `spider_sample.json` - Spider benchmark samples (if used)
+- `custom_queries.json` - Domain-specific test queries
+
+## Dataset Format
+
+```json
+[
+  {
+    "id": 1,
+    "question": "Natural language question",
+    "gold_sql": "Expected SQL query",
+    "difficulty": "easy|medium|hard",
+    "category": "aggregation|filter|join",
+    "tags": ["tag1", "tag2"]
+  }
+]
+```
+
+## How to Create
+
+See `experiments/README.md` for dataset creation instructions.
+
+## Benchmark Usage
+
+```bash
+python -m experiments.evaluate_text_to_sql --config experiments/configs/benchmark_v1.yaml
+```

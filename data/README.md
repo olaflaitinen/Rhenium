@@ -1,4 +1,4 @@
-# Data Directory
+﻿# Data Directory
 
 This directory contains data files used by the LLM-Based DBMS system.
 
@@ -6,10 +6,10 @@ This directory contains data files used by the LLM-Based DBMS system.
 
 ```
 data/
-├── processed/          # Processed database files
-│   └── sales.db       # SQLite database (created by init_db.py)
-├── raw/               # Raw data files (if any)
-└── vector_store/      # Vector embeddings (if semantic search enabled)
+├── processed/ # Processed database files
+│ └── sales.db # SQLite database (created by init_db.py)
+├── raw/ # Raw data files (if any)
+└── vector_store/ # Vector embeddings (if semantic search enabled)
 ```
 
 ## Database Files
@@ -27,14 +27,14 @@ python scripts/init_db.py
 
 ## Data Privacy
 
-⚠️ **Important Notes:**
+️ **Important Notes:**
 
 1. **Never commit database files with real data** to version control
 2. The `.gitignore` file excludes:
-   - `*.db` - Database files
-   - `*.sqlite` - SQLite databases
-   - `data/processed/*` - Processed data
-   - `data/raw/*` - Raw data files
+ - `*.db` - Database files
+ - `*.sqlite` - SQLite databases
+ - `data/processed/*` - Processed data
+ - `data/raw/*` - Raw data files
 
 3. **For development**: Use sample/synthetic data only
 4. **For production**: Use PostgreSQL, not SQLite files
@@ -69,12 +69,12 @@ Edit `scripts/init_db.py` to add more sample data:
 
 ```python
 sample_data = [
-    {
-        "ORDERNUMBER": 10103,
-        "QUANTITYORDERED": 25,
-        # ... add more fields
-    },
-    # Add more records
+ {
+ "ORDERNUMBER": 10103,
+ "QUANTITYORDERED": 25,
+ # ... add more fields
+ },
+ # Add more records
 ]
 ```
 
@@ -91,8 +91,8 @@ df = pd.read_csv('data/raw/your_data.csv')
 db = SessionLocal()
 
 for _, row in df.iterrows():
-    order = SalesOrder(**row.to_dict())
-    db.add(order)
+ order = SalesOrder(**row.to_dict())
+ db.add(order)
 
 db.commit()
 db.close()
@@ -141,9 +141,9 @@ If semantic search is enabled (`ENABLE_SEMANTIC_SEARCH=True`):
 - Vector embeddings are stored in `data/vector_store/`
 - Uses ChromaDB by default
 - Contains embeddings of:
-  - Table descriptions
-  - Column metadata
-  - Example queries
+ - Table descriptions
+ - Column metadata
+ - Example queries
 
 **To initialize vector store:**
 ```bash

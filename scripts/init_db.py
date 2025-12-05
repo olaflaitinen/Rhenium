@@ -1,4 +1,4 @@
-"""
+﻿"""
 Production-grade database initialization script.
 
 Initializes:

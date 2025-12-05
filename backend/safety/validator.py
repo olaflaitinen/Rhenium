@@ -1,4 +1,4 @@
-import sqlparse
+﻿import sqlparse
 from sqlparse.sql import Statement, Token
 from sqlparse.tokens import Keyword
 

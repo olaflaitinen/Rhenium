@@ -1,0 +1,42 @@
+﻿# Development dependencies for LLM-Based DBMS
+# Install with: pip install -r requirements-dev.txt
+
+# All production dependencies
+-r requirements-minimal.txt
+
+# Testing
+pytest==8.0.0
+pytest-cov==4.1.0
+pytest-asyncio==0.23.0
+pytest-mock==3.12.0
+httpx==0.26.0  # For TestClient
+
+# Code Quality
+black==24.1.1
+isort==5.13.2
+ruff==0.1.14
+mypy==1.8.0
+
+# Type stubs
+types-requests==2.31.0.20240106
+types-redis==4.6.0.20240106
+
+# Documentation
+mkdocs==1.5.3
+mkdocs-material==9.5.6
+mkdocstrings[python]==0.24.0
+
+# Debugging
+ipython==8.20.0
+ipdb==0.13.13
+
+# Performance profiling
+py-spy==0.3.14
+memory-profiler==0.61.0
+
+# Database tools
+alembic==1.13.1  # For migrations
+
+# Security scanning
+bandit==1.7.6
+safety==3.0.1

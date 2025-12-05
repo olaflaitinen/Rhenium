@@ -1,4 +1,4 @@
-# Changelog
+﻿# Changelog
 
 All notable changes to the LLM-Based DBMS project will be documented in this file.
 
@@ -153,11 +153,11 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to contribute to this 
 - Mehmet Fidan
 
 **Institution:**
-Eskişehir Technical University  
+Eskişehir Technical University 
 Department of Electrical and Electronics Engineering
 
 **Project:**
-2025-2026 Design Project  
+2025-2026 Design Project 
 TÜBİTAK 2209-A Research Project
 
 ## License

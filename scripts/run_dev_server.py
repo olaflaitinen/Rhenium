@@ -1,4 +1,4 @@
-"""
+﻿"""
 Development server startup script.
 """
 import sys

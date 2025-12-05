@@ -1,4 +1,4 @@
-"""
+﻿"""
 Authentication and Authorization Module
 
 This module provides enterprise-grade authentication and authorization

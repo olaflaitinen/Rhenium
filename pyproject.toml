@@ -1,4 +1,4 @@
-[project]
+﻿[project]
 name = "llm-based-dbms"
 version = "1.0.0"
 description = "Production-grade LLM-based Database Management System with Natural Language Interface"
@@ -106,3 +106,26 @@ warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
 
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+]
+ignore = [
+    "E501",  # line too long (handled by black)
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]  # Unused imports in __init__.py
+"backend/tests/*" = ["F401", "F811"]  # Test files

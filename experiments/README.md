@@ -1,4 +1,4 @@
-# Experiments Directory
+﻿# Experiments Directory
 
 Research evaluation framework for Text-to-SQL performance benchmarking.
 
@@ -10,17 +10,17 @@ This directory contains tools and datasets for evaluating the LLM-Based DBMS sys
 
 ```
 experiments/
-├── datasets/              # Evaluation datasets (gitignored)
-│   ├── sales_queries.json # Sales domain queries
-│   ├── spider_sample.json # Spider dataset samples (if used)
-│   └── .gitkeep
-├── configs/               # Evaluation configurations
-│   └── benchmark_v1.yaml
-├── results/              # Benchmark results (gitignored)
-├── evaluate_text_to_sql.py  # Main evaluation script
-├── benchmark.py          # Benchmarking utilities
-├── config.py            # Configuration loader
-└── README.md            # This file
+├── datasets/ # Evaluation datasets (gitignored)
+│ ├── sales_queries.json # Sales domain queries
+│ ├── spider_sample.json # Spider dataset samples (if used)
+│ └── .gitkeep
+├── configs/ # Evaluation configurations
+│ └── benchmark_v1.yaml
+├── results/ # Benchmark results (gitignored)
+├── evaluate_text_to_sql.py # Main evaluation script
+├── benchmark.py # Benchmarking utilities
+├── config.py # Configuration loader
+└── README.md # This file
 ```
 
 ## Available Scripts
@@ -71,9 +71,9 @@ Avg Latency: 1.15s
 from experiments.benchmark import run_benchmark
 
 results = run_benchmark(
-    dataset_path='experiments/datasets/sales_queries.json',
-    llm_provider='openai',
-    num_iterations=3
+ dataset_path='experiments/datasets/sales_queries.json',
+ llm_provider='openai',
+ num_iterations=3
 )
 ```
 
@@ -93,13 +93,13 @@ Datasets should be JSON files with the following structure:
 
 ```json
 [
-  {
-    "question": "Natural language question",
-    "gold_sql": "Expected SQL query",
-    "description": "Optional description",
-    "difficulty": "easy|medium|hard",
-    "category": "aggregation|filter|join|etc"
-  }
+ {
+ "question": "Natural language question",
+ "gold_sql": "Expected SQL query",
+ "description": "Optional description",
+ "difficulty": "easy|medium|hard",
+ "category": "aggregation|filter|join|etc"
+ }
 ]
 ```
 
@@ -109,24 +109,24 @@ Create `experiments/datasets/sales_queries.json`:
 
 ```json
 [
-  {
-    "question": "What is the total revenue from all sales?",
-    "gold_sql": "SELECT SUM(SALES) as total_revenue FROM sales;",
-    "difficulty": "easy",
-    "category": "aggregation"
-  },
-  {
-    "question": "Show the top 5 customers by total spending.",
-    "gold_sql": "SELECT CUSTOMERNAME, SUM(SALES) as total FROM sales GROUP BY CUSTOMERNAME ORDER BY total DESC LIMIT 5;",
-    "difficulty": "medium",
-    "category": "aggregation-groupby"
-  },
-  {
-    "question": "How many distinct products were sold in each quarter of 2003?",
-    "gold_sql": "SELECT QTR_ID, COUNT(DISTINCT PRODUCTCODE) as products FROM sales WHERE YEAR_ID = 2003 GROUP BY QTR_ID;",
-    "difficulty": "medium",
-    "category": "aggregation-filter"
-  }
+ {
+ "question": "What is the total revenue from all sales?",
+ "gold_sql": "SELECT SUM(SALES) as total_revenue FROM sales;",
+ "difficulty": "easy",
+ "category": "aggregation"
+ },
+ {
+ "question": "Show the top 5 customers by total spending.",
+ "gold_sql": "SELECT CUSTOMERNAME, SUM(SALES) as total FROM sales GROUP BY CUSTOMERNAME ORDER BY total DESC LIMIT 5;",
+ "difficulty": "medium",
+ "category": "aggregation-groupby"
+ },
+ {
+ "question": "How many distinct products were sold in each quarter of 2003?",
+ "gold_sql": "SELECT QTR_ID, COUNT(DISTINCT PRODUCTCODE) as products FROM sales WHERE YEAR_ID = 2003 GROUP BY QTR_ID;",
+ "difficulty": "medium",
+ "category": "aggregation-filter"
+ }
 ]
 ```
 
@@ -163,10 +163,10 @@ Percentage of generated SQL queries that exactly match the gold standard:
 
 ```python
 def exact_match(generated, gold):
-    # Normalize whitespace and case
-    gen_norm = ' '.join(generated.lower().split())
-    gold_norm = ' '.join(gold.lower().split())
-    return gen_norm == gold_norm
+ # Normalize whitespace and case
+ gen_norm = ' '.join(generated.lower().split())
+ gold_norm = ' '.join(gold.lower().split())
+ return gen_norm == gold_norm
 ```
 
 ### 2. Execution Accuracy (EX)
@@ -175,9 +175,9 @@ Percentage of queries that return the correct result set:
 
 ```python
 def execution_accuracy(generated, gold, db):
-    gen_result = execute_query(generated, db)
-    gold_result = execute_query(gold, db)
-    return gen_result == gold_result
+ gen_result = execute_query(generated, db)
+ gold_result = execute_query(gold, db)
+ return gen_result == gold_result
 ```
 
 ### 3. Valid Syntax
@@ -186,11 +186,11 @@ Percentage of generated queries that are syntactically valid:
 
 ```python
 def valid_syntax(sql):
-    try:
-        sqlparse.parse(sql)
-        return True
-    except:
-        return False
+ try:
+ sqlparse.parse(sql)
+ return True
+ except:
+ return False
 ```
 
 ### 4. Safety Compliance
@@ -201,9 +201,9 @@ Percentage of queries that pass safety validation:
 from backend.safety.validator import SQLValidator
 
 def safety_compliance(sql, user):
-    validator = SQLValidator(user)
-    is_valid, _ = validator.validate(sql)
-    return is_valid
+ validator = SQLValidator(user)
+ is_valid, _ = validator.validate(sql)
+ return is_valid
 ```
 
 ---
@@ -226,15 +226,15 @@ LLM_PROVIDER=openai OPENAI_API_KEY=sk-... python -m experiments.evaluate_text_to
 from experiments.benchmark import compare_providers
 
 results = compare_providers(
-    dataset='experiments/datasets/sales_queries.json',
-    providers=['openai', 'anthropic', 'mock']
+ dataset='experiments/datasets/sales_queries.json',
+ providers=['openai', 'anthropic', 'mock']
 )
 
 # Results structure:
 # {
-#   'openai': {'accuracy': 0.95, 'avg_latency': 1.2},
-#   'anthropic': {'accuracy': 0.93, 'avg_latency': 1.5},
-#   'mock': {'accuracy': 0.15, 'avg_latency': 0.01}
+# 'openai': {'accuracy': 0.95, 'avg_latency': 1.2},
+# 'anthropic': {'accuracy': 0.93, 'avg_latency': 1.5},
+# 'mock': {'accuracy': 0.15, 'avg_latency': 0.01}
 # }
 ```
 
@@ -244,27 +244,27 @@ Create `experiments/configs/benchmark_v1.yaml`:
 
 ```yaml
 dataset:
-  path: "experiments/datasets/sales_queries.json"
-  split: "test"  # train/val/test
+ path: "experiments/datasets/sales_queries.json"
+ split: "test" # train/val/test
 
 llm:
-  provider: "openai"
-  model: "gpt-4-turbo"
-  temperature: 0.0
-  max_tokens: 500
+ provider: "openai"
+ model: "gpt-4-turbo"
+ temperature: 0.0
+ max_tokens: 500
 
 evaluation:
-  metrics:
-    - exact_match
-    - execution_accuracy
-    - valid_syntax
-    - safety_compliance
-  num_iterations: 3
+ metrics:
+ - exact_match
+ - execution_accuracy
+ - valid_syntax
+ - safety_compliance
+ num_iterations: 3
 
 output:
-  results_dir: "experiments/results"
-  export_format: ["json", "csv"]
-  save_errors: true
+ results_dir: "experiments/results"
+ export_format: ["json", "csv"]
+ save_errors: true
 ```
 
 Run with config:
@@ -308,16 +308,16 @@ from experiments.benchmark import export_results
 
 # Export to CSV
 export_results(
-    'experiments/results/benchmark.json',
-    format='csv',
-    output_path='experiments/results/benchmark.csv'
+ 'experiments/results/benchmark.json',
+ format='csv',
+ output_path='experiments/results/benchmark.csv'
 )
 
 # Export to LaTeX table
 export_results(
-    'experiments/results/benchmark.json',
-    format='latex',
-    output_path='paper/tables/results.tex'
+ 'experiments/results/benchmark.json',
+ format='latex',
+ output_path='paper/tables/results.tex'
 )
 ```
 
@@ -347,8 +347,8 @@ Test queries across different database backends:
 from experiments.benchmark import cross_db_test
 
 results = cross_db_test(
-    query="SELECT * FROM sales WHERE country = 'USA'",
-    databases=['sqlite', 'postgresql', 'mysql']
+ query="SELECT * FROM sales WHERE country = 'USA'",
+ databases=['sqlite', 'postgresql', 'mysql']
 )
 ```
 
@@ -358,18 +358,18 @@ Test different prompt strategies:
 
 ```python
 prompts = [
-    'zero_shot',
-    'few_shot_3',
-    'few_shot_5',
-    'chain_of_thought'
+ 'zero_shot',
+ 'few_shot_3',
+ 'few_shot_5',
+ 'chain_of_thought'
 ]
 
 for prompt_type in prompts:
-    results = run_evaluation(
-        dataset='sales_queries.json',
-        prompt_strategy=prompt_type
-    )
-    save_results(f'results_{prompt_type}.json', results)
+ results = run_evaluation(
+ dataset='sales_queries.json',
+ prompt_strategy=prompt_type
+ )
+ save_results(f'results_{prompt_type}.json', results)
 ```
 
 ---
@@ -400,14 +400,14 @@ Example contribution:
 
 ```json
 {
-  "dataset_name": "sales_advanced_v1",
-  "version": "1.0",
-  "created": "2025-12-03",
-  "author": "Your Name",
-  "license": "MIT",
-  "queries": [
-    // ... query objects
-  ]
+ "dataset_name": "sales_advanced_v1",
+ "version": "1.0",
+ "created": "2025-12-03",
+ "author": "Your Name",
+ "license": "MIT",
+ "queries": [
+ // ... query objects
+ ]
 }
 ```
 
@@ -426,10 +426,10 @@ For research papers and publications:
 
 ```bibtex
 @dataset{sales_queries_v1,
-  title={Sales Domain Text-to-SQL Evaluation Dataset},
-  author={Kulalı, Derya Umut and Aydın, Anıl and Alhan, Sıla},
-  year={2025},
-  institution={Eskişehir Technical University}
+ title={Sales Domain Text-to-SQL Evaluation Dataset},
+ author={Kulalı, Derya Umut and Aydın, Anıl and Alhan, Sıla},
+ year={2025},
+ institution={Eskişehir Technical University}
 }
 ```
 
@@ -460,7 +460,7 @@ ls experiments/datasets/
 ```python
 # Add delays between requests
 import time
-time.sleep(1)  # 1 second delay
+time.sleep(1) # 1 second delay
 ```
 
 **4. Memory Issues with Large Datasets**
@@ -469,8 +469,8 @@ time.sleep(1)  # 1 second delay
 # Process in batches
 batch_size = 10
 for i in range(0, len(dataset), batch_size):
-    batch = dataset[i:i+batch_size]
-    evaluate(batch)
+ batch = dataset[i:i+batch_size]
+ evaluate(batch)
 ```
 
 ---

@@ -1,4 +1,4 @@
-# Contributing to LLM-Based DBMS
+﻿# Contributing to LLM-Based DBMS
 
 Thank you for your interest in contributing to the LLM-Based Database Management System project!
 
@@ -26,35 +26,35 @@ If you find bugs or have feature requests:
 ### Development Setup
 
 1. **Fork and Clone**
-   ```bash
-   git clone https://github.com/olaflaitinen/Rhenium.git
-   cd Rhenium
-   ```
+ ```bash
+ git clone https://github.com/Japyh/llm-based-dbms.git
+ cd llm-based-dbms
+ ```
 
 2. **Create Virtual Environment**
-   ```bash
-   python -m venv venv
-   # Windows
-   .\venv\Scripts\activate
-   # Linux/macOS
-   source venv/bin/activate
-   ```
+ ```bash
+ python -m venv venv
+ # Windows
+ .\venv\Scripts\activate
+ # Linux/macOS
+ source venv/bin/activate
+ ```
 
 3. **Install Dependencies**
-   ```bash
-   pip install -r requirements-minimal.txt
-   pip install -e ".[dev]"  # Install dev dependencies
-   ```
+ ```bash
+ pip install -r requirements-minimal.txt
+ pip install -e ".[dev]" # Install dev dependencies
+ ```
 
 4. **Initialize Database**
-   ```bash
-   python scripts/init_db.py
-   ```
+ ```bash
+ python scripts/init_db.py
+ ```
 
 5. **Run Tests**
-   ```bash
-   pytest backend/tests/ -v
-   ```
+ ```bash
+ pytest backend/tests/ -v
+ ```
 
 ### Code Style
 
@@ -76,31 +76,31 @@ mypy backend/
 ### Making Changes
 
 1. **Create a Branch**
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
+ ```bash
+ git checkout -b feature/your-feature-name
+ ```
 
 2. **Make Your Changes**
-   - Write clear, concise commit messages
-   - Add tests for new features
-   - Update documentation as needed
+ - Write clear, concise commit messages
+ - Add tests for new features
+ - Update documentation as needed
 
 3. **Test Your Changes**
-   ```bash
-   pytest backend/tests/ -v --cov=backend
-   ```
+ ```bash
+ pytest backend/tests/ -v --cov=backend
+ ```
 
 4. **Commit and Push**
-   ```bash
-   git add .
-   git commit -m "feat: add your feature description"
-   git push origin feature/your-feature-name
-   ```
+ ```bash
+ git add .
+ git commit -m "feat: add your feature description"
+ git push origin feature/your-feature-name
+ ```
 
 5. **Create Pull Request**
-   - Provide clear description of changes
-   - Reference any related issues
-   - Ensure CI passes
+ - Provide clear description of changes
+ - Reference any related issues
+ - Ensure CI passes
 
 ### Commit Message Format
 

@@ -1,4 +1,4 @@
-"""
+﻿"""
 Access Control Module for Table and Column Level Permissions.
 
 This module implements fine-grained access control logic, allowing the system

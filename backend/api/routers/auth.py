@@ -1,4 +1,4 @@
-"""
+﻿"""
 Authentication router for login and token management.
 """
 from datetime import timedelta

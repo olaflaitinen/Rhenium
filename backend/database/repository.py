@@ -1,4 +1,4 @@
-"""
+﻿"""
 Repository Pattern for Database Access.
 
 Abstracts the data access layer to allow switching between different

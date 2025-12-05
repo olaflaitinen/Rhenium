@@ -88,5 +88,5 @@ experiments/datasets/*
 .dmypy.json
 dmypy.json
 
-# Artifacts (Antigravity)
+# Artifacts
 .gemini/

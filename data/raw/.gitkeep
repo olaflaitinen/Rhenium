@@ -1,1 +1,19 @@
-# This file keeps the directory in Git
+# Raw Data Directory
+
+This directory is for raw/source data files.
+
+Files in this directory are gitignored to protect sensitive data.
+
+## Purpose
+
+Place raw CSV, JSON, or other data files here before processing.
+
+## Example Files
+
+- `sales_raw.csv` - Raw sales data
+- `customers.json` - Customer information
+- `products.xlsx` - Product catalog
+
+## Security Note
+
+Never commit sensitive or proprietary data to version control.
