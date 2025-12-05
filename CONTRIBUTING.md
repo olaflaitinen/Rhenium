@@ -8,9 +8,9 @@ This is an academic research project conducted at **Eskişehir Technical Univers
 
 ## Project Team
 
-- **Derya Umut Kulalı** - Principal Investigator / Project Lead
-- **Anıl Aydın** - Research Team Member
-- **Sıla Alhan** - Research Team Member
+- **Derya Umut Kulali** - Principal Investigator / Project Lead
+- **Anil Aydin** - Research Team Member
+- **Sila Alhan** - Research Team Member
 - **Mehmet Fidan** - Academic Advisor
 
 ## How to Contribute

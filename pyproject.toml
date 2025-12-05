@@ -5,10 +5,10 @@ description = "Production-grade LLM-based Database Management System with Natura
 readme = "README.md"
 requires-python = ">=3.11"
 authors = [
-    {name = "Derya Umut Kulalı", email = ""},
-    {name = "Anıl Aydın", email = ""},
-    {name = "Sıla Alhan", email = ""},
-    {name = "Mehmet Fidan", email = ""}
+    {name = "Derya Umut Kulali", email = "d_u_k@ogr.eskisehir.edu.tr"},
+    {name = "Anil Aydin", email = "anila@ogr.eskisehir.edu.tr"},
+    {name = "Sila Alhan", email = "silaalhan@ogr.eskisehir.edu.tr"},
+    {name = "Mehmet Fidan", email = "mfidan@eskisehir.edu.tr"}
 ]
 license = {text = "MIT"}
 

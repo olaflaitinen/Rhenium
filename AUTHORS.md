@@ -8,6 +8,7 @@
 - Role: Project Lead, Principal Investigator
 - Institution: Eskisehir Technical University
 - Department: Electrical and Electronics Engineering
+- Email: d_u_k@ogr.eskisehir.edu.tr
 - Contributions: Overall architecture, LLM integration, project management
 
 ### Research Team Members
@@ -16,12 +17,14 @@
 - Role: Research Team Member
 - Institution: Eskisehir Technical University
 - Department: Electrical and Electronics Engineering
+- Email: anila@ogr.eskisehir.edu.tr
 - Contributions: Safety validation system, database layer, API development
 
 **Sila Alhan**  
 - Role: Research Team Member
 - Institution: Eskisehir Technical University
 - Department: Electrical and Electronics Engineering
+- Email: silaalhan@ogr.eskisehir.edu.tr
 - Contributions: Authentication system, RBAC implementation, testing framework
 
 ### Academic Supervision
@@ -30,6 +33,7 @@
 - Role: Academic Advisor
 - Institution: Eskisehir Technical University
 - Department: Electrical and Electronics Engineering
+- Email: mfidan@eskisehir.edu.tr
 - Contributions: Project supervision, technical guidance, academic oversight
 
 ---

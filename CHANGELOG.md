@@ -65,7 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **CHANGELOG.md**: Version history
 
 ### Academic Attribution
-- **Team Members**: Derya Umut Kulalı (Principal Investigator), Anıl Aydın, Sıla Alhan
+- **Team Members**: Derya Umut Kulali (Principal Investigator), Anil Aydin, Sila Alhan
 - **Academic Advisor**: Mehmet Fidan
 - **Institution**: Eskişehir Technical University, Department of Electrical and Electronics Engineering
 - **Funding**: TÜBİTAK 2209-A University Students Research Projects Support Program
@@ -145,9 +145,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to contribute to this 
 ## Team & Contact
 
 **Student Team Members:**
-- Derya Umut Kulalı (Principal Investigator)
-- Anıl Aydın
-- Sıla Alhan
+- Derya Umut Kulali (Principal Investigator)
+- Anil Aydin
+- Sila Alhan
 
 **Academic Advisor:**
 - Mehmet Fidan

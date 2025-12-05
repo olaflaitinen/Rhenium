@@ -5,7 +5,7 @@
 **Version**: 1.0.0 
 **Institution**: Eskişehir Technical University, Department of Electrical and Electronics Engineering 
 **Project**: 2025-2026 Design Project | TÜBİTAK 2209-A 
-**Team**: Derya Umut Kulalı, Anıl Aydın, Sıla Alhan | **Advisor**: Mehmet Fidan
+**Team**: Derya Umut Kulali, Anil Aydin, Sila Alhan | **Advisor**: Mehmet Fidan
 
 ---
 
@@ -721,7 +721,7 @@ For API support, issues, or questions:
 Eskişehir Technical University 
 Department of Electrical and Electronics Engineering
 
-**Team**: Derya Umut Kulalı, Anıl Aydın, Sıla Alhan 
+**Team**: Derya Umut Kulali, Anil Aydin, Sila Alhan 
 **Advisor**: Mehmet Fidan
 
 **GitHub**: https://github.com/Japyh/llm-based-dbms/issues

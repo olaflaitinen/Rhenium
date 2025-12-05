@@ -4,7 +4,7 @@
 
 **For**: Eskişehir Technical University, Department of Electrical and Electronics Engineering 
 **Project**: 2025-2026 Design Project | TÜBİTAK 2209-A Research Project 
-**Team**: Derya Umut Kulalı, Anıl Aydın, Sıla Alhan | **Advisor**: Mehmet Fidan
+**Team**: Derya Umut Kulali, Anil Aydin, Sila Alhan | **Advisor**: Mehmet Fidan
 
 ---
 
@@ -863,6 +863,6 @@ API_PORT=8001
 
 For questions or issues, contact the development team through Eskişehir Technical University's Department of Electrical and Electronics Engineering.
 
-**Team**: Derya Umut Kulalı, Anıl Aydın, Sıla Alhan 
+**Team**: Derya Umut Kulali, Anil Aydin, Sila Alhan 
 **Advisor**: Mehmet Fidan 
 **Project**: TÜBİTAK 2209-A Research Project

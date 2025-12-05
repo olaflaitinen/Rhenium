@@ -283,23 +283,25 @@ This project is executed by a multidisciplinary team of engineering students at 
 
 ### Student Team Members
 
-- **Derya Umut Kulalı** 
- *Principal Investigator / Project Lead* 
+
+- **Derya Umut Kulali** (d_u_k@ogr.eskisehir.edu.tr)  
+ *Principal Investigator / Project Lead*  
  Department of Electrical and Electronics Engineering
 
-- **Anıl Aydın** 
- *Research Team Member* 
+- **Anil Aydin** (anila@ogr.eskisehir.edu.tr)  
+ *Research Team Member*  
  Department of Electrical and Electronics Engineering
 
-- **Sıla Alhan** 
- *Research Team Member* 
+- **Sila Alhan** (silaalhan@ogr.eskisehir.edu.tr)  
+ *Research Team Member*  
  Department of Electrical and Electronics Engineering
 
 ### Academic Supervision
 
-- **Mehmet Fidan** 
- *Academic Advisor* 
+- **Mehmet Fidan** (mfidan@eskisehir.edu.tr)  
+ *Academic Advisor*  
  Department of Electrical and Electronics Engineering
+
 
 The team structure is intentionally designed to cover the full spectrum of the system's requirements, from high-level software architecture and API design to efficient data processing and system optimization.
 

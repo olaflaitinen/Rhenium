@@ -13,9 +13,9 @@
 ## Team
 
 ### Student Researchers
-- **Derya Umut Kulalı** - Principal Investigator / Project Lead
-- **Anıl Aydın** - Research Team Member
-- **Sıla Alhan** - Research Team Member
+- **Derya Umut Kulali** - Principal Investigator / Project Lead
+- **Anil Aydin** - Research Team Member
+- **Sila Alhan** - Research Team Member
 
 ### Academic Supervision
 - **Mehmet Fidan** - Academic Advisor, Department of Electrical and Electronics Engineering
@@ -524,7 +524,7 @@ This project represents a comprehensive effort to bridge natural language unders
 
 **For more information, contact:**
 
-Derya Umut Kulalı (Principal Investigator) 
+Derya Umut Kulali (Principal Investigator) 
 Eskişehir Technical University 
 Department of Electrical and Electronics Engineering 
 Email: [university email]
