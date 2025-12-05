@@ -1,0 +1,42 @@
+name: "anthropic_claude"
+description: "Evaluation using Anthropic Claude model"
+version: "1.0.0"
+
+dataset:
+  path: "experiments/datasets/sales_queries_v1.json"
+  split: "test"
+  max_samples: null
+
+llm:
+  provider: "anthropic"
+  model: "claude-3-sonnet-20240229"
+  temperature: 0.0
+  max_tokens: 500
+  timeout: 30
+
+evaluation:
+  metrics:
+    - exact_match
+    - execution_accuracy
+    - valid_syntax
+    - safety_compliance
+  num_iterations: 3
+  parallel: false
+
+output:
+  results_dir: "experiments/results"
+  timestamp: true
+  export_formats:
+    - json
+    - csv
+  save_errors: true
+  save_intermediate: true
+
+safety:
+  mode: "strict"
+  enforce: true
+
+logging:
+  level: "INFO"
+  file: "experiments/logs/anthropic_benchmark.log"
+  console: true

@@ -1,0 +1,49 @@
+name: "benchmark_v1"
+description: "Standard benchmark configuration for Text-to-SQL evaluation"
+version: "1.0.0"
+
+# Dataset configuration
+dataset:
+  path: "experiments/datasets/sales_queries_v1.json"
+  split: "test"
+  shuffle: false
+  max_samples: null  # Use all samples
+
+# LLM Provider Configuration
+llm:
+  provider: "openai"  # openai | anthropic | mock
+  model: "gpt-4-turbo"
+  temperature: 0.0  # Deterministic for evaluation
+  max_tokens: 500
+  timeout: 30  # seconds
+
+# Evaluation Metrics
+evaluation:
+  metrics:
+    - exact_match          # SQL string exact match
+    - execution_accuracy   # Result set equivalence
+    - valid_syntax         # SQL parser validation
+    - safety_compliance    # Passes safety checks
+  num_iterations: 3  # For statistical significance
+  parallel: false    # Run sequentially to avoid rate limits
+  
+# Output Configuration
+output:
+  results_dir: "experiments/results"
+  timestamp: true  # Add timestamp to filename
+  export_formats:
+    - json
+    - csv
+  save_errors: true  # Save failed queries for analysis
+  save_intermediate: true  # Save per-iteration results
+
+# Safety Settings
+safety:
+  mode: "strict"  # Use strict safety validation
+  enforce: true   # Fail if query doesn't pass safety checks
+
+# Logging
+logging:
+  level: "INFO"
+  file: "experiments/logs/benchmark.log"
+  console: true

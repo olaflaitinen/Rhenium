@@ -1,0 +1,40 @@
+name: "mock_provider_test"
+description: "Testing with mock LLM provider (no API key needed)"
+version: "1.0.0"
+
+dataset:
+  path: "experiments/datasets/sales_queries_v1.json"
+  split: "test"
+  max_samples: 10  # Small sample for quick testing
+
+llm:
+  provider: "mock"
+  model: "mock"
+  temperature: 0.0
+  max_tokens: 500
+  timeout: 5
+
+evaluation:
+  metrics:
+    - exact_match
+    - valid_syntax
+    - safety_compliance
+  num_iterations: 1  # Single pass for testing
+  parallel: false
+
+output:
+  results_dir: "experiments/results"
+  timestamp: true
+  export_formats:
+    - json
+  save_errors: true
+  save_intermediate: false
+
+safety:
+  mode: "strict"
+  enforce: true
+
+logging:
+  level: "DEBUG"
+  file: "experiments/logs/mock_test.log"
+  console: true
