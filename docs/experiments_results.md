@@ -78,17 +78,17 @@ We conducted a side-by-side comparison of model outputs on challenging queries.
 **Question**: "List all customers in France who have a credit limit over 50000."
 
 - **Base Model**: `SELECT name FROM client_table WHERE country_name = 'France' ...`
-  - ❌ **Error**: Hallucinated table `client_table` and column `country_name`.
+  - [ERROR] **Error**: Hallucinated table `client_table` and column `country_name`.
 - **Fine-Tuned Model**: `SELECT CUSTOMERNAME FROM customers WHERE COUNTRY = 'France' ...`
-  - ✅ **Correct**: Used correct schema `customers` and `COUNTRY`.
+  - [CORRECT] **Correct**: Used correct schema `customers` and `COUNTRY`.
 
 ### Case Study 2: Domain Logic
 **Question**: "Show me the big deals."
 
 - **Base Model**: `SELECT * FROM deals WHERE size = 'big'`
-  - ❌ **Error**: Literal interpretation of "big deals".
+  - [ERROR] **Error**: Literal interpretation of "big deals".
 - **Fine-Tuned Model**: `SELECT * FROM sales WHERE DEALSIZE = 'Large'`
-  - ✅ **Correct**: Understood "big deals" maps to `DEALSIZE = 'Large'`.
+  - [CORRECT] **Correct**: Understood "big deals" maps to `DEALSIZE = 'Large'`.
 
 ## Analysis
 

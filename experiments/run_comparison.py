@@ -46,7 +46,7 @@ def generate_markdown_report(results):
         md += "| Feature | Base Model | Fine-Tuned Model |\n"
         md += "| :--- | :--- | :--- |\n"
         md += f"| **SQL Output** | `{base['sql']}` | `{ft['sql']}` |\n"
-        md += f"| **Correct?** | {'✅' if base['is_correct'] else '❌'} | {'✅' if ft['is_correct'] else '❌'} |\n"
+        md += f"| **Correct?** | {'[OK]' if base['is_correct'] else '[FAIL]'} | {'[OK]' if ft['is_correct'] else '[FAIL]'} |\n"
         md += f"| **Error Type** | {base['error_type']} | {ft['error_type']} |\n"
         md += f"| **Latency** | {base['latency_ms']}ms | {ft['latency_ms']}ms |\n"
         md += "\n---\n\n"
