@@ -50,7 +50,7 @@ Our fine-tuned Llama-3-8B model significantly outperforms the base model and app
 > [!NOTE]
 > The fine-tuned model achieves **82.1% execution accuracy**, which is a **~1.8x improvement** over the base model.
 
-
+![Accuracy Comparison](images/accuracy_comparison.png)
 
 ### 2. Latency and Efficiency
 
@@ -62,11 +62,13 @@ Fine-tuned local models offer significantly lower latency compared to large API-
 | **Llama-3-8B (Base)** | 0.40s |
 | **Llama-3-8B (Fine-Tuned)** | 0.45s |
 
+![Latency Comparison](images/latency_comparison.png)
+
 ### 3. Error Analysis
 
 The fine-tuned model drastically reduces "Schema Hallucination" errors, which are the most common failure mode for the base model.
 
-
+![Error Distribution](images/error_distribution.png)
 
 ## Qualitative Analysis
 
