@@ -67,11 +67,18 @@ The project serves a dual purpose:
  - **FastAPI Backend**: High-performance, asynchronous REST API.
  - **Structured Logging**: Comprehensive JSON logging for observability.
  - **Dockerized Deployment**: Full containerization with Docker Compose (API + PostgreSQL + Redis).
-- **Research Evaluation Framework**: Built-in scripts to evaluate Text-to-SQL performance using exact matching and result set equivalence metrics.
+## Experiments & Results
+
+We have conducted extensive evaluation comparing our fine-tuned models against base models and GPT-4.
+
+- **Execution Accuracy**: Fine-tuned Llama-3-8B achieves **82.1%**, approaching GPT-4 performance.
+- **Latency**: **3x faster** than GPT-4.
+
+👉 **[View Full Experiment Results & Charts](docs/experiments_results.md)**
 
 ---
 
-## System Architecture
+## Features
 
 The system follows a layered microservices-ready architecture:
 

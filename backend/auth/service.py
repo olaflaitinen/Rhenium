@@ -17,7 +17,7 @@ from backend.auth.models import User, Role, RoleEnum, TokenData
 from backend.config.settings import settings
 
 # Password hashing configuration
-pwd_context = CryptContext(schemes=["bcrypt", "pbkdf2_sha256"], deprecated="auto")
+pwd_context = CryptContext(schemes=["pbkdf2_sha256", "bcrypt"], deprecated="auto")
 
 # JWT configuration
 SECRET_KEY = settings.JWT_SECRET_KEY

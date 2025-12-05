@@ -158,10 +158,6 @@ def insert_bulk_data(db):
     # Use raw SQL for speed
     try:
         # Prepare data for bulk insert
-        # Note: We use a simplified approach compatible with SQLite and Postgres
-        # For very large datasets, specific bulk copy methods would be better
-        
-        # We'll use SQLAlchemy's insert
         from backend.database.models import SalesOrder
         
         # Batch insert
@@ -175,10 +171,10 @@ def insert_bulk_data(db):
             print(f"  Inserted batch {i//batch_size + 1}/{(len(orders)-1)//batch_size + 1}")
             
         db.commit()
-        print("✓ Bulk insertion complete.")
+        print("[OK] Bulk insertion complete.")
         
     except Exception as e:
-        print(f"✗ Error inserting data: {e}")
+        print(f"[FAIL] Error inserting data: {e}")
         db.rollback()
         raise
 
@@ -203,8 +199,8 @@ def create_default_admin(db):
         admin_user.is_superuser = True
         db.commit()
         
-        print("✓ Created admin user (admin/admin123)")
-        print("  ⚠️  CHANGE PASSWORD IN PRODUCTION!")
+        print("[OK] Created admin user (admin/admin123)")
+        print("  [WARN] CHANGE PASSWORD IN PRODUCTION!")
         
     except Exception as e:
         print(f"Warning: Could not create admin user: {e}")
@@ -220,14 +216,14 @@ def main():
         # 1. Initialize Schema
         print("\n1. Initializing Schema...")
         init_db()
-        print("✓ Schema created.")
+        print("[OK] Schema created.")
         
         db = SessionLocal()
         
         # 2. Initialize Roles
         print("\n2. Initializing Roles...")
         RBACService.initialize_default_roles(db)
-        print("✓ Roles created.")
+        print("[OK] Roles created.")
         
         # 3. Create Admin
         print("\n3. Creating Admin...")
@@ -238,12 +234,12 @@ def main():
         insert_bulk_data(db)
         
         print("\n" + "=" * 60)
-        print("✓ Initialization Complete!")
+        print("[OK] Initialization Complete!")
         print("=" * 60)
         return 0
         
     except Exception as e:
-        print(f"\n✗ Fatal Error: {e}")
+        print(f"\n[FAIL] Fatal Error: {e}")
         import traceback
         traceback.print_exc()
         return 1

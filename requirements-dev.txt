@@ -40,3 +40,8 @@ alembic==1.13.1  # For migrations
 # Security scanning
 bandit==1.7.6
 safety==3.0.1
+
+# Visualization
+matplotlib==3.8.2
+seaborn==0.13.2
+numpy==1.26.3
