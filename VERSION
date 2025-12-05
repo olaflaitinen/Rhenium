@@ -1,0 +1,28 @@
+Version 1.0.0
+
+Release Date: December 2025
+Project: LLM-Based Database Management System
+Institution: Eskisehir Technical University
+Department: Electrical and Electronics Engineering
+
+This is the initial production release of the LLM-Based DBMS, developed as part of the 2025-2026 Design Project and funded by TUBITAK 2209-A.
+
+Key Features:
+- Natural Language to SQL translation using LLMs
+- Multi-provider LLM support (OpenAI, Anthropic)
+- Advanced SQL safety validation
+- Role Based Access Control (RBAC)
+- JWT authentication
+- Prometheus metrics and structured logging
+- Docker and Kubernetes deployment support
+- Comprehensive API documentation
+
+Team:
+- Derya Umut Kulali (Principal Investigator)
+- Anil Aydin (Research Team Member)
+- Sila Alhan (Research Team Member)
+
+Academic Advisor:
+- Mehmet Fidan
+
+For detailed changelog, see CHANGELOG.md

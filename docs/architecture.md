@@ -37,6 +37,27 @@ The LLM-based DBMS is designed as a modular, layered system that translates natu
  - Define schema metadata (`schema.py`).
  - Execute raw SQL queries (`executor.py`).
 
+## System Diagram
+
+```mermaid
+graph TD
+    User[User Request<br>Natural Language] --> API[API Gateway<br>FastAPI, Auth, Rate Limiting]
+    API --> Orch[Orchestrator<br>LangChain, Prompt Management]
+    
+    subgraph Services
+        Orch --> LLM[LLM Service]
+        Orch --> Vector[Vector Store<br>Optional Semantic Search]
+    end
+    
+    Orch --> SQL[Generated SQL]
+    SQL --> Safety[Safety Engine<br>sqlparse, Policy Validation]
+    Safety --> DB[Query Executor<br>SQLAlchemy, PostgreSQL/SQLite]
+    
+    DB --> Safety
+    Safety --> API
+    API --> User
+```
+
 ## Data Flow
 
 1. **User** sends a natural language question to `POST /query`.

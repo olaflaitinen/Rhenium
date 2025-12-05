@@ -27,24 +27,13 @@
 
 ### Architecture Components
 
-```
-┌─────────────┐
-│ Clients │
-└──────┬──────┘
- │
-┌──────▼──────────┐
-│ Load Balancer │ (Nginx/Traefik)
-└──────┬──────────┘
- │
-┌──────▼──────────┐
-│ API Service │ (FastAPI - Multiple replicas)
-└──────┬──────────┘
- │
- ┌───┴───┐
- │ │
-┌──▼──┐ ┌──▼──┐
-│Redis│ │ DB │ (PostgreSQL)
-└─────┘ └─────┘
+```mermaid
+graph TD
+    Client[Clients] --> LB[Load Balancer<br>Nginx/Traefik]
+    LB --> API[API Service<br>FastAPI - Multiple Replicas]
+    
+    API --> Redis[Redis<br>Cache & Queue]
+    API --> DB[Database<br>PostgreSQL]
 ```
 
 ### Deployment Options

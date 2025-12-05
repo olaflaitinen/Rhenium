@@ -75,40 +75,23 @@ The project serves a dual purpose:
 
 The system follows a layered microservices-ready architecture:
 
-```text
-User Request (Natural Language)
- │
- ▼
-┌───────────────────┐
-│ API Gateway │ (FastAPI, Auth, Rate Limiting)
-└────────┬──────────┘
- │
- ▼
-┌───────────────────┐
-│ Orchestrator │ (LangChain, Prompt Management)
-└────────┬──────────┘
- │
- ┌────┴────┐
- ▼ ▼
-┌───────┐ ┌───────┐
-│ LLM │ │Vector │ (Optional Semantic Search)
-│Service│ │ Store │
-└───┬───┘ └───┬───┘
- │ │
- ▼ ▼
-┌───────────────────┐
-│ Generated SQL │
-└────────┬──────────┘
- │
- ▼
-┌───────────────────┐
-│ Safety Engine │ (sqlparse, Policy Validation)
-└────────┬──────────┘
- │
- ▼
-┌───────────────────┐
-│ Query Executor │ (SQLAlchemy, PostgreSQL/SQLite)
-└───────────────────┘
+```mermaid
+graph TD
+    User[User Request<br>Natural Language] --> API[API Gateway<br>FastAPI, Auth, Rate Limiting]
+    API --> Orch[Orchestrator<br>LangChain, Prompt Management]
+    
+    subgraph Services
+        Orch --> LLM[LLM Service]
+        Orch --> Vector[Vector Store<br>Optional Semantic Search]
+    end
+    
+    Orch --> SQL[Generated SQL]
+    SQL --> Safety[Safety Engine<br>sqlparse, Policy Validation]
+    Safety --> DB[Query Executor<br>SQLAlchemy, PostgreSQL/SQLite]
+    
+    DB --> Safety
+    Safety --> API
+    API --> User
 ```
 
 ---
