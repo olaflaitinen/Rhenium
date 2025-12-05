@@ -15,9 +15,9 @@ sys.path.append(str(project_root))
 def check_python_version():
     print("Checking Python version...", end=" ")
     if sys.version_info < (3, 11):
-        print("❌ Python 3.11+ is required.")
+        print("[FAIL] Python 3.11+ is required.")
         return False
-    print(f"✅ {sys.version.split()[0]}")
+    print(f"[OK] {sys.version.split()[0]}")
     return True
 
 def check_dependencies():
@@ -31,15 +31,15 @@ def check_dependencies():
     for dep in dependencies:
         print(f"  - {dep:<15}", end=" ")
         if importlib.util.find_spec(dep) is not None:
-            print("✅ Found")
+            print("[OK] Found")
         else:
             # Handle package name differences
             if dep == "jose" and importlib.util.find_spec("jose"):
-                print("✅ Found")
+                print("[OK] Found")
             elif dep == "passlib" and importlib.util.find_spec("passlib"):
-                print("✅ Found")
+                print("[OK] Found")
             else:
-                print("❌ Missing")
+                print("[FAIL] Missing")
                 all_ok = False
     return all_ok
 
@@ -49,19 +49,19 @@ def check_configuration():
     # Check .env
     env_path = project_root / ".env"
     if env_path.exists():
-        print("  - .env file:      ✅ Found")
+        print("  - .env file:      [OK] Found")
     else:
-        print("  - .env file:      ⚠️  Not found (using defaults)")
+        print("  - .env file:      [WARN] Not found (using defaults)")
         
     # Load settings
     try:
         from backend.config.settings import settings
-        print(f"  - Environment:    ✅ {settings.ENVIRONMENT}")
-        print(f"  - Database Type:  ✅ {settings.DATABASE_TYPE}")
-        print(f"  - LLM Provider:   ✅ {settings.LLM_PROVIDER}")
+        print(f"  - Environment:    [OK] {settings.ENVIRONMENT}")
+        print(f"  - Database Type:  [OK] {settings.DATABASE_TYPE}")
+        print(f"  - LLM Provider:   [OK] {settings.LLM_PROVIDER}")
         return True
     except Exception as e:
-        print(f"  - Settings load:  ❌ Failed ({e})")
+        print(f"  - Settings load:  [FAIL] Failed ({e})")
         return False
 
 def check_database():
@@ -71,11 +71,11 @@ def check_database():
     if settings.DATABASE_TYPE == "sqlite":
         db_path = project_root / settings.SQLITE_DB_PATH
         if db_path.exists():
-            print(f"  - SQLite file:    ✅ Found ({db_path.name})")
+            print(f"  - SQLite file:    [OK] Found ({db_path.name})")
             size_mb = db_path.stat().st_size / (1024 * 1024)
-            print(f"  - Size:           ℹ️  {size_mb:.2f} MB")
+            print(f"  - Size:           [INFO] {size_mb:.2f} MB")
         else:
-            print(f"  - SQLite file:    ❌ Not found at {settings.SQLITE_DB_PATH}")
+            print(f"  - SQLite file:    [FAIL] Not found at {settings.SQLITE_DB_PATH}")
             print("    Run 'python scripts/init_db.py' to create it.")
             return False
             
@@ -86,7 +86,7 @@ def check_database():
         
         with engine.connect() as conn:
             result = conn.execute(text("SELECT 1"))
-            print("  - Connection:     ✅ Successful")
+            print("  - Connection:     [OK] Successful")
             
             # Check tables
             if settings.DATABASE_TYPE == "sqlite":
@@ -96,14 +96,14 @@ def check_database():
                 missing = [t for t in required if t not in table_names]
                 
                 if not missing:
-                    print(f"  - Tables:         ✅ Found {len(table_names)} tables")
+                    print(f"  - Tables:         [OK] Found {len(table_names)} tables")
                 else:
-                    print(f"  - Tables:         ❌ Missing {missing}")
+                    print(f"  - Tables:         [FAIL] Missing {missing}")
                     return False
                     
         return True
     except Exception as e:
-        print(f"  - Connection:     ❌ Failed ({e})")
+        print(f"  - Connection:     [FAIL] Failed ({e})")
         return False
 
 def main():
@@ -120,11 +120,11 @@ def main():
     
     print("\n" + "=" * 60)
     if all(checks):
-        print("✅ System is ready to run!")
+        print("[OK] System is ready to run!")
         print("   Start server with: python scripts/run_dev_server.py")
         return 0
     else:
-        print("❌ System verification failed. Please fix the issues above.")
+        print("[FAIL] System verification failed. Please fix the issues above.")
         return 1
 
 if __name__ == "__main__":
