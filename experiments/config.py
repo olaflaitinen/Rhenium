@@ -31,6 +31,6 @@ class ExperimentConfig(BaseModel):
 
 def load_config(path: str) -> ExperimentConfig:
     import yaml
-    with open(path, 'r') as f:
+    with open(path, 'r', encoding='utf-8-sig') as f:
         data = yaml.safe_load(f)
     return ExperimentConfig(**data)

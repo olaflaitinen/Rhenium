@@ -11,7 +11,7 @@ from backend.auth.service import AuthService
 from backend.database.connection import get_db
 from backend.config.settings import settings
 
-router = APIRouter(prefix="/api/v1/auth", tags=["Authentication"])
+router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 
 @router.post("/login", response_model=Token)

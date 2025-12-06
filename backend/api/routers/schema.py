@@ -22,7 +22,7 @@ from backend.auth.models import User
 from backend.database.connection import get_db, engine
 from backend.database.models import SchemaMetadata
 
-router = APIRouter(prefix="/api/v1/schema", tags=["Schema"])
+router = APIRouter(prefix="/schema", tags=["Schema"])
 
 
 @router.get("/", response_model=SchemaResponse)

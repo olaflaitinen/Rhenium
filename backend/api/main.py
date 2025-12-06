@@ -62,37 +62,39 @@ def create_app() -> FastAPI:
     app.add_exception_handler(Exception, generic_exception_handler)
     
     # Include routers
-    app.include_router(health.router)
-    app.include_router(auth.router)
-    app.include_router(query.router)
-    app.include_router(admin.router)
-    app.include_router(schema.router)
+    api_router = FastAPI()
+    app.include_router(health.router, prefix=f"/api/{settings.API_VERSION}")
+    app.include_router(auth.router, prefix=f"/api/{settings.API_VERSION}")
+    app.include_router(query.router, prefix=f"/api/{settings.API_VERSION}")
+    app.include_router(admin.router, prefix=f"/api/{settings.API_VERSION}")
+    app.include_router(schema.router, prefix=f"/api/{settings.API_VERSION}")
     
     # Metrics Endpoint
     from prometheus_client import make_asgi_app
     metrics_app = make_asgi_app()
     app.mount("/metrics", metrics_app)
 
-    return app
+    # Metrics Middleware
+    @app.middleware("http")
+    async def metrics_middleware(request, call_next):
+        import time
+        from backend.observability.metrics import REQUEST_LATENCY, REQUEST_COUNT
+        
+        start_time = time.time()
+        method = request.method
+        path = request.url.path
+        
+        try:
+            response = await call_next(request)
+            status_code = response.status_code
+            REQUEST_COUNT.labels(method=method, endpoint=path, status=status_code).inc()
+            REQUEST_LATENCY.labels(method=method, endpoint=path).observe(time.time() - start_time)
+            return response
+        except Exception as e:
+            REQUEST_COUNT.labels(method=method, endpoint=path, status=500).inc()
+            raise e
 
-@app.middleware("http")
-async def metrics_middleware(request, call_next):
-    import time
-    from backend.observability.metrics import REQUEST_LATENCY, REQUEST_COUNT
-    
-    start_time = time.time()
-    method = request.method
-    path = request.url.path
-    
-    try:
-        response = await call_next(request)
-        status_code = response.status_code
-        REQUEST_COUNT.labels(method=method, endpoint=path, status=status_code).inc()
-        REQUEST_LATENCY.labels(method=method, endpoint=path).observe(time.time() - start_time)
-        return response
-    except Exception as e:
-        REQUEST_COUNT.labels(method=method, endpoint=path, status=500).inc()
-        raise e
+    return app
 
 
 # Create application instance

@@ -1,0 +1,62 @@
+[
+    {
+        "db_id": "sales_db",
+        "question": "What is the total revenue?",
+        "query": "SELECT SUM(amount) FROM sales",
+        "difficulty": "easy"
+    },
+    {
+        "db_id": "sales_db",
+        "question": "Show top 5 customers by spending.",
+        "query": "SELECT customer_name, SUM(amount) as total FROM sales GROUP BY customer_name ORDER BY total DESC LIMIT 5",
+        "difficulty": "medium"
+    },
+    {
+        "db_id": "sales_db",
+        "question": "Count sales per region.",
+        "query": "SELECT region, COUNT(*) FROM sales GROUP BY region",
+        "difficulty": "medium"
+    },
+    {
+        "db_id": "sales_db",
+        "question": "List all products sold in 2023.",
+        "query": "SELECT DISTINCT product_name FROM sales WHERE year = 2023",
+        "difficulty": "easy"
+    },
+    {
+        "db_id": "sales_db",
+        "question": "Average sale amount.",
+        "query": "SELECT AVG(amount) FROM sales",
+        "difficulty": "easy"
+    },
+    {
+        "db_id": "sales_db",
+        "question": "Who bought 'Widget A'?",
+        "query": "SELECT customer_name FROM sales WHERE product_name = 'Widget A'",
+        "difficulty": "easy"
+    },
+    {
+        "db_id": "sales_db",
+        "question": "Total sales in Q1.",
+        "query": "SELECT SUM(amount) FROM sales WHERE quarter = 'Q1'",
+        "difficulty": "medium"
+    },
+    {
+        "db_id": "sales_db",
+        "question": "Number of unique customers.",
+        "query": "SELECT COUNT(DISTINCT customer_id) FROM sales",
+        "difficulty": "easy"
+    },
+    {
+        "db_id": "sales_db",
+        "question": "Sales by category.",
+        "query": "SELECT category, SUM(amount) FROM sales GROUP BY category",
+        "difficulty": "medium"
+    },
+    {
+        "db_id": "sales_db",
+        "question": "Max sale amount.",
+        "query": "SELECT MAX(amount) FROM sales",
+        "difficulty": "easy"
+    }
+]

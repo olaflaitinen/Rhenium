@@ -208,6 +208,38 @@ class RBACService:
         return []
 
     @staticmethod
+    def get_accessible_columns(user: User, table_name: str) -> List[str]:
+        """
+        Get list of columns a user can access in a specific table.
+        
+        Args:
+            user: User object
+            table_name: Name of the table
+            
+        Returns:
+            List of column names or ["*"] for all
+        """
+        if user.has_role(RoleEnum.ADMIN.value) or user.has_role(RoleEnum.DATA_SCIENTIST.value):
+            return ["*"]
+            
+        table_name = table_name.lower()
+        
+        if user.has_role(RoleEnum.ANALYST.value):
+            # Analysts can see almost everything except PII
+            if table_name == "customers":
+                return ["id", "name", "email", "phone", "address", "created_at"] # Exclude SSN, Credit Card
+            return ["*"]
+            
+        elif user.has_role(RoleEnum.VIEWER.value):
+            # Viewers have limited view
+            if table_name == "customers":
+                return ["id", "name", "email"]
+            if table_name == "sales":
+                return ["id", "amount", "date", "product_id"] # Exclude profit margin etc.
+                
+        return ["*"] # Default to all if table access is granted (table check happens first)
+
+    @staticmethod
     def can_execute_dangerous_query(user: User) -> bool:
         """
         Check if user can execute potentially dangerous queries (UPDATE, DELETE, etc.).

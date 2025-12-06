@@ -33,6 +33,10 @@ class QueryRequest(BaseModel):
         None,
         description="Optional user identifier for logging"
     )
+    history: Optional[List[Dict[str, str]]] = Field(
+        None,
+        description="Conversation history for multi-turn context (e.g. [{'role': 'user', 'content': '...'}, {'role': 'assistant', 'content': '...'}])"
+    )
 
 
 class SQLValidationResult(BaseModel):

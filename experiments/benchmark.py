@@ -67,14 +67,9 @@ class BenchmarkRunner:
         self._save_results()
 
     def _load_dataset(self) -> List[Dict]:
-        # Mock loader
         path = self.config.dataset.path
         if not os.path.exists(path):
-            # Return dummy data if file doesn't exist for scaffolding
-            return [
-                {"question": "How many users?", "sql": "SELECT count(*) FROM users"},
-                {"question": "List all products", "sql": "SELECT * FROM products"}
-            ]
+            raise FileNotFoundError(f"Dataset not found at {path}")
         with open(path, 'r') as f:
             return json.load(f)
 

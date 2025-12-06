@@ -141,30 +141,6 @@ llm-based-dbms/
  cd llm-based-dbms
  ```
 
-2. **Create and activate a virtual environment:**
- ```bash
- python -m venv venv
- # Windows
- .\venv\Scripts\activate
- # Linux/macOS
- source venv/bin/activate
- ```
-
-3. **Install dependencies:**
- ```bash
- pip install -r requirements-minimal.txt
- pip install email-validator
- ```
-
----
-
-## Configuration
-
-The system uses environment variables for configuration. Copy the example file to create your local configuration:
-
-```bash
-cp .env.example .env
-```
 
 **Key Settings (`.env`):**
 

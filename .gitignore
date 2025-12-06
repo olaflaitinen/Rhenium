@@ -73,8 +73,8 @@ data/raw/*
 data/processed/*
 !data/processed/.gitkeep
 experiments/results/
-experiments/datasets/*
-!experiments/datasets/.gitkeep
+# experiments/datasets/*
+# !experiments/datasets/.gitkeep
 
 # Cache
 .cache/

@@ -39,7 +39,7 @@ from backend.observability.metrics import (
     SQL_EXECUTION_TIME
 )
 
-router = APIRouter(prefix="/api/v1/query", tags=["Query"])
+router = APIRouter(prefix="/query", tags=["Query"])
 
 
 @router.post("/", response_model=QueryResponse)
@@ -78,7 +78,7 @@ async def process_natural_language_query(
             try:
                 llm_client = get_llm_client()
                 prompt = get_text_to_sql_prompt(request.question)
-                generated_sql = llm_client.generate_sql(prompt)
+                generated_sql = llm_client.generate_sql(prompt, history=request.history)
                 
                 # Clean SQL
                 generated_sql = generated_sql.replace("```sql", "").replace("```", "").strip()

@@ -1,0 +1,32 @@
+[
+    {
+        "db_id": "concert_singer",
+        "question": "How many singers do we have?",
+        "query": "SELECT count(*) FROM singer",
+        "difficulty": "easy"
+    },
+    {
+        "db_id": "concert_singer",
+        "question": "Show name, country, age for all singers ordered by age from the oldest to the youngest.",
+        "query": "SELECT Name ,  Country ,  Age FROM singer ORDER BY Age DESC",
+        "difficulty": "medium"
+    },
+    {
+        "db_id": "pets_1",
+        "question": "Find the weight of the youngest dog.",
+        "query": "SELECT weight FROM pets WHERE pet_age  =  (SELECT min(pet_age) FROM pets)",
+        "difficulty": "medium"
+    },
+    {
+        "db_id": "car_1",
+        "question": "What is the maximum miles per gallon of the cars with 8 cylinders or produced before 1980 ?",
+        "query": "SELECT max(mpg) FROM cars_data WHERE cylinders  =  8 OR year  <  1980",
+        "difficulty": "hard"
+    },
+    {
+        "db_id": "flight_2",
+        "question": "For each city, find the number of airports.",
+        "query": "SELECT City ,  count(*) FROM airports GROUP BY City",
+        "difficulty": "medium"
+    }
+]

@@ -86,7 +86,22 @@ class SQLValidator:
                 if table.lower() not in accessible_tables:
                     return False, f"Access denied for table '{table}'."
 
+        # 4. Check Column Permissions (Basic Implementation)
+        for table in tables:
+            allowed_columns = self.rbac.get_accessible_columns(self.user, table)
+            if "*" in allowed_columns:
+                continue
+                
+            if self._is_select_star(stmt):
+                 return False, f"SELECT * is not allowed for table '{table}' due to column restrictions. Please select specific columns."
+
         return True, ""
+
+    def _is_select_star(self, stmt: Statement) -> bool:
+        for token in stmt.tokens:
+            if token.ttype is sqlparse.tokens.Wildcard:
+                return True
+        return False
 
     def _extract_tables(self, stmt: Statement) -> set[str]:
         """

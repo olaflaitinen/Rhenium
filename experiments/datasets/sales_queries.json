@@ -1,0 +1,32 @@
+[
+    {
+        "id": "q1",
+        "question": "What is the total revenue per product category for the last quarter?",
+        "sql": "SELECT PRODUCTLINE, SUM(SALES) FROM sales_orders WHERE QTR_ID = 4 AND YEAR_ID = 2024 GROUP BY PRODUCTLINE",
+        "difficulty": "medium"
+    },
+    {
+        "id": "q2",
+        "question": "List all customers in France.",
+        "sql": "SELECT CUSTOMERNAME FROM customers WHERE COUNTRY = 'France'",
+        "difficulty": "easy"
+    },
+    {
+        "id": "q3",
+        "question": "Show the top 5 products by quantity sold.",
+        "sql": "SELECT PRODUCTCODE, SUM(QUANTITYORDERED) as total_qty FROM sales_orders GROUP BY PRODUCTCODE ORDER BY total_qty DESC LIMIT 5",
+        "difficulty": "medium"
+    },
+    {
+        "id": "q4",
+        "question": "Which customer has the highest total order value?",
+        "sql": "SELECT CUSTOMERNAME, SUM(SALES) as total_value FROM sales_orders JOIN customers ON sales_orders.CUSTOMERNAME = customers.CUSTOMERNAME GROUP BY CUSTOMERNAME ORDER BY total_value DESC LIMIT 1",
+        "difficulty": "hard"
+    },
+    {
+        "id": "q5",
+        "question": "Count the number of orders in 'Shipped' status.",
+        "sql": "SELECT COUNT(*) FROM sales_orders WHERE STATUS = 'Shipped'",
+        "difficulty": "easy"
+    }
+]

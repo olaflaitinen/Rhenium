@@ -29,6 +29,17 @@ if settings.DATABASE_TYPE == "sqlite":
         cursor = dbapi_conn.cursor()
         cursor.execute("PRAGMA foreign_keys=ON")
         cursor.close()
+elif settings.DATABASE_TYPE == "mysql":
+    # MySQL configuration
+    engine = create_engine(
+        settings.database_url,
+        poolclass=QueuePool,
+        pool_size=5,
+        max_overflow=10,
+        pool_pre_ping=True,
+        pool_recycle=3600, # Recycle connections to avoid timeouts
+        echo=settings.DEBUG
+    )
 else:
     # PostgreSQL configuration
     engine = create_engine(

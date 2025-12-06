@@ -17,7 +17,7 @@ from backend.auth.service import AuthService
 from backend.auth.rbac import RBACService
 from backend.database.connection import get_db
 
-router = APIRouter(prefix="/api/v1/admin", tags=["Admin"])
+router = APIRouter(prefix="/admin", tags=["Admin"])
 
 
 @router.post("/users", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
